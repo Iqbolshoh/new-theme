@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { ThemeDefinition } from '../../../core/ThemeRegistry';
+import { useTheme } from '../../../contexts/ThemeContext';
 
 interface HeroModernProps {
   content: {
@@ -14,10 +14,11 @@ interface HeroModernProps {
   };
   isEditing: boolean;
   onChange: (content: any) => void;
-  theme?: ThemeDefinition;
 }
 
-const HeroModern: React.FC<HeroModernProps> = ({ content, isEditing, onChange, theme }) => {
+const HeroModern: React.FC<HeroModernProps> = ({ content, isEditing, onChange }) => {
+  const { currentColorTheme, currentFontTheme } = useTheme();
+
   const handleChange = (field: string, value: string) => {
     onChange({ ...content, [field]: value });
   };
@@ -29,7 +30,7 @@ const HeroModern: React.FC<HeroModernProps> = ({ content, isEditing, onChange, t
         backgroundImage: `url('${content.backgroundImage}')`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
-        fontFamily: theme?.fonts?.primary || 'Inter, system-ui, sans-serif'
+        fontFamily: currentFontTheme.fonts.primary
       }}
     >
       <div 
@@ -45,11 +46,11 @@ const HeroModern: React.FC<HeroModernProps> = ({ content, isEditing, onChange, t
               onChange={(e) => handleChange('title', e.target.value)}
               className="text-4xl md:text-6xl font-bold mb-6 bg-transparent border-2 border-dashed rounded-lg p-2 text-center w-full text-white placeholder-white/70"
               style={{ 
-                fontFamily: theme?.fonts?.primary || 'Inter, system-ui, sans-serif',
-                fontSize: 'clamp(2rem, 5vw, 4rem)',
-                fontWeight: theme?.typography?.headingWeight || 700,
+                fontFamily: currentFontTheme.fonts.primary,
+                fontSize: currentFontTheme.typography.h1,
+                fontWeight: currentFontTheme.typography.headingWeight,
                 borderColor: 'rgba(255, 255, 255, 0.5)',
-                borderRadius: theme?.borderRadius?.lg || '12px'
+                borderRadius: currentFontTheme.borderRadius.lg
               }}
               placeholder="Enter title"
             />
@@ -59,11 +60,11 @@ const HeroModern: React.FC<HeroModernProps> = ({ content, isEditing, onChange, t
               onChange={(e) => handleChange('subtitle', e.target.value)}
               className="text-xl md:text-2xl mb-4 bg-transparent border-2 border-dashed rounded-lg p-2 text-center w-full text-white placeholder-white/70"
               style={{ 
-                fontFamily: theme?.fonts?.secondary || 'Inter, system-ui, sans-serif',
-                fontSize: theme?.typography?.subtitle || '1.25rem',
-                fontWeight: theme?.typography?.bodyWeight || 400,
+                fontFamily: currentFontTheme.fonts.secondary,
+                fontSize: currentFontTheme.typography.subtitle,
+                fontWeight: currentFontTheme.typography.bodyWeight,
                 borderColor: 'rgba(255, 255, 255, 0.5)',
-                borderRadius: theme?.borderRadius?.lg || '12px'
+                borderRadius: currentFontTheme.borderRadius.lg
               }}
               placeholder="Enter subtitle"
             />
@@ -72,11 +73,11 @@ const HeroModern: React.FC<HeroModernProps> = ({ content, isEditing, onChange, t
               onChange={(e) => handleChange('description', e.target.value)}
               className="text-lg mb-8 max-w-2xl mx-auto bg-transparent border-2 border-dashed rounded-lg p-2 text-center w-full text-white placeholder-white/70 resize-none"
               style={{ 
-                fontFamily: theme?.fonts?.secondary || 'Inter, system-ui, sans-serif',
-                fontSize: theme?.typography?.body || '1rem',
-                fontWeight: theme?.typography?.bodyWeight || 400,
+                fontFamily: currentFontTheme.fonts.secondary,
+                fontSize: currentFontTheme.typography.body,
+                fontWeight: currentFontTheme.typography.bodyWeight,
                 borderColor: 'rgba(255, 255, 255, 0.5)',
-                borderRadius: theme?.borderRadius?.lg || '12px'
+                borderRadius: currentFontTheme.borderRadius.lg
               }}
               placeholder="Enter description"
               rows={3}
@@ -88,14 +89,14 @@ const HeroModern: React.FC<HeroModernProps> = ({ content, isEditing, onChange, t
                 onChange={(e) => handleChange('ctaText', e.target.value)}
                 className="px-6 py-3 rounded-lg border-2 border-dashed placeholder-white/70 font-semibold"
                 style={{
-                  background: `linear-gradient(135deg, ${theme?.colors?.primary || '#3b82f6'}, ${theme?.colors?.secondary || '#06b6d4'})`,
+                  background: `linear-gradient(135deg, ${currentColorTheme.colors.primary}, ${currentColorTheme.colors.secondary})`,
                   color: '#ffffff',
-                  fontFamily: theme?.fonts?.secondary || 'Inter, system-ui, sans-serif',
-                  fontSize: theme?.typography?.button || '1rem',
-                  fontWeight: theme?.typography?.buttonWeight || 600,
+                  fontFamily: currentFontTheme.fonts.secondary,
+                  fontSize: currentFontTheme.typography.button,
+                  fontWeight: currentFontTheme.typography.buttonWeight,
                   borderColor: 'rgba(255, 255, 255, 0.5)',
-                  borderRadius: theme?.borderRadius?.md || '8px',
-                  boxShadow: theme?.shadows?.md || '0 4px 6px -1px rgb(0 0 0 / 0.1)'
+                  borderRadius: currentFontTheme.borderRadius.md,
+                  boxShadow: currentColorTheme.shadows.md
                 }}
                 placeholder="CTA Text"
               />
@@ -106,11 +107,11 @@ const HeroModern: React.FC<HeroModernProps> = ({ content, isEditing, onChange, t
                   onChange={(e) => handleChange('secondaryCtaText', e.target.value)}
                   className="px-6 py-3 border-2 text-white rounded-lg bg-transparent placeholder-white/70 font-semibold"
                   style={{ 
-                    fontFamily: theme?.fonts?.secondary || 'Inter, system-ui, sans-serif',
-                    fontSize: theme?.typography?.button || '1rem',
-                    fontWeight: theme?.typography?.buttonWeight || 600,
+                    fontFamily: currentFontTheme.fonts.secondary,
+                    fontSize: currentFontTheme.typography.button,
+                    fontWeight: currentFontTheme.typography.buttonWeight,
                     borderColor: '#ffffff',
-                    borderRadius: theme?.borderRadius?.md || '8px'
+                    borderRadius: currentFontTheme.borderRadius.md
                   }}
                   placeholder="Secondary CTA"
                 />
@@ -125,11 +126,11 @@ const HeroModern: React.FC<HeroModernProps> = ({ content, isEditing, onChange, t
               transition={{ duration: 0.8 }}
               className="font-bold mb-6"
               style={{ 
-                fontFamily: theme?.fonts?.primary || 'Inter, system-ui, sans-serif',
-                fontSize: 'clamp(2rem, 5vw, 4rem)',
-                fontWeight: theme?.typography?.headingWeight || 700,
+                fontFamily: currentFontTheme.fonts.primary,
+                fontSize: currentFontTheme.typography.h1,
+                fontWeight: currentFontTheme.typography.headingWeight,
                 color: '#ffffff',
-                lineHeight: theme?.typography?.headingLineHeight || 1.2
+                lineHeight: currentFontTheme.typography.headingLineHeight
               }}
             >
               {content.title}
@@ -140,11 +141,11 @@ const HeroModern: React.FC<HeroModernProps> = ({ content, isEditing, onChange, t
               transition={{ duration: 0.8, delay: 0.2 }}
               className="mb-4"
               style={{ 
-                fontFamily: theme?.fonts?.secondary || 'Inter, system-ui, sans-serif',
-                fontSize: theme?.typography?.subtitle || '1.25rem',
-                fontWeight: theme?.typography?.bodyWeight || 400,
+                fontFamily: currentFontTheme.fonts.secondary,
+                fontSize: currentFontTheme.typography.subtitle,
+                fontWeight: currentFontTheme.typography.bodyWeight,
                 color: '#ffffff',
-                lineHeight: theme?.typography?.bodyLineHeight || 1.6
+                lineHeight: currentFontTheme.typography.bodyLineHeight
               }}
             >
               {content.subtitle}
@@ -155,11 +156,11 @@ const HeroModern: React.FC<HeroModernProps> = ({ content, isEditing, onChange, t
               transition={{ duration: 0.8, delay: 0.4 }}
               className="mb-8 max-w-2xl mx-auto"
               style={{ 
-                fontFamily: theme?.fonts?.secondary || 'Inter, system-ui, sans-serif',
-                fontSize: theme?.typography?.body || '1rem',
-                fontWeight: theme?.typography?.bodyWeight || 400,
+                fontFamily: currentFontTheme.fonts.secondary,
+                fontSize: currentFontTheme.typography.body,
+                fontWeight: currentFontTheme.typography.bodyWeight,
                 color: 'rgba(255, 255, 255, 0.9)',
-                lineHeight: theme?.typography?.bodyLineHeight || 1.6
+                lineHeight: currentFontTheme.typography.bodyLineHeight
               }}
             >
               {content.description}
@@ -174,13 +175,13 @@ const HeroModern: React.FC<HeroModernProps> = ({ content, isEditing, onChange, t
                 href={content.ctaLink} 
                 className="px-6 py-3 rounded-lg hover:opacity-90 transition-opacity font-semibold"
                 style={{ 
-                  background: `linear-gradient(135deg, ${theme?.colors?.primary || '#3b82f6'}, ${theme?.colors?.secondary || '#06b6d4'})`,
+                  background: `linear-gradient(135deg, ${currentColorTheme.colors.primary}, ${currentColorTheme.colors.secondary})`,
                   color: '#ffffff',
-                  fontFamily: theme?.fonts?.secondary || 'Inter, system-ui, sans-serif',
-                  fontSize: theme?.typography?.button || '1rem',
-                  fontWeight: theme?.typography?.buttonWeight || 600,
-                  borderRadius: theme?.borderRadius?.md || '8px',
-                  boxShadow: theme?.shadows?.md || '0 4px 6px -1px rgb(0 0 0 / 0.1)',
+                  fontFamily: currentFontTheme.fonts.secondary,
+                  fontSize: currentFontTheme.typography.button,
+                  fontWeight: currentFontTheme.typography.buttonWeight,
+                  borderRadius: currentFontTheme.borderRadius.md,
+                  boxShadow: currentColorTheme.shadows.md,
                   textDecoration: 'none'
                 }}
               >
@@ -191,16 +192,16 @@ const HeroModern: React.FC<HeroModernProps> = ({ content, isEditing, onChange, t
                   href="#" 
                   className="px-6 py-3 border-2 text-white rounded-lg hover:bg-white hover:text-gray-900 transition-colors font-semibold"
                   style={{ 
-                    fontFamily: theme?.fonts?.secondary || 'Inter, system-ui, sans-serif',
-                    fontSize: theme?.typography?.button || '1rem',
-                    fontWeight: theme?.typography?.buttonWeight || 600,
+                    fontFamily: currentFontTheme.fonts.secondary,
+                    fontSize: currentFontTheme.typography.button,
+                    fontWeight: currentFontTheme.typography.buttonWeight,
                     borderColor: '#ffffff',
-                    borderRadius: theme?.borderRadius?.md || '8px',
+                    borderRadius: currentFontTheme.borderRadius.md,
                     textDecoration: 'none'
                   }}
                   onMouseEnter={(e) => {
                     e.currentTarget.style.backgroundColor = '#ffffff';
-                    e.currentTarget.style.color = theme?.colors?.text || '#111827';
+                    e.currentTarget.style.color = currentColorTheme.colors.text;
                   }}
                   onMouseLeave={(e) => {
                     e.currentTarget.style.backgroundColor = 'transparent';

@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Mail, Phone, MapPin } from 'lucide-react';
-import { ThemeDefinition } from '../../../core/ThemeRegistry';
+import { useTheme } from '../../../contexts/ThemeContext';
 
 interface ContactFormProps {
   content: {
@@ -13,10 +13,11 @@ interface ContactFormProps {
   };
   isEditing: boolean;
   onChange: (content: any) => void;
-  theme?: ThemeDefinition;
 }
 
-const ContactForm: React.FC<ContactFormProps> = ({ content, isEditing, onChange, theme }) => {
+const ContactForm: React.FC<ContactFormProps> = ({ content, isEditing, onChange }) => {
+  const { currentColorTheme, currentFontTheme } = useTheme();
+
   const handleChange = (field: string, value: string) => {
     onChange({ ...content, [field]: value });
   };
@@ -25,8 +26,8 @@ const ContactForm: React.FC<ContactFormProps> = ({ content, isEditing, onChange,
     <section 
       className="py-20"
       style={{ 
-        backgroundColor: theme?.colors?.background || '#f9fafb',
-        fontFamily: theme?.fonts?.primary || 'Inter, system-ui, sans-serif'
+        backgroundColor: currentColorTheme.colors.background,
+        fontFamily: currentFontTheme.fonts.primary
       }}
     >
       <div className="max-w-4xl mx-auto px-4">
@@ -39,12 +40,12 @@ const ContactForm: React.FC<ContactFormProps> = ({ content, isEditing, onChange,
                 onChange={(e) => handleChange('title', e.target.value)}
                 className="mb-4 bg-transparent border-2 border-dashed rounded-lg p-2 text-center w-full max-w-2xl mx-auto"
                 style={{ 
-                  color: theme?.colors?.primary || '#3b82f6',
-                  borderColor: `${theme?.colors?.primary || '#3b82f6'}50`,
-                  fontFamily: theme?.fonts?.primary || 'Inter, system-ui, sans-serif',
-                  fontSize: 'clamp(1.5rem, 4vw, 2.5rem)',
-                  fontWeight: theme?.typography?.headingWeight || 700,
-                  borderRadius: theme?.borderRadius?.lg || '12px'
+                  color: currentColorTheme.colors.primary,
+                  borderColor: `${currentColorTheme.colors.primary}50`,
+                  fontFamily: currentFontTheme.fonts.primary,
+                  fontSize: currentFontTheme.typography.h2,
+                  fontWeight: currentFontTheme.typography.headingWeight,
+                  borderRadius: currentFontTheme.borderRadius.lg
                 }}
                 placeholder="Enter title"
               />
@@ -54,12 +55,12 @@ const ContactForm: React.FC<ContactFormProps> = ({ content, isEditing, onChange,
                 onChange={(e) => handleChange('subtitle', e.target.value)}
                 className="bg-transparent border-2 border-dashed rounded-lg p-2 text-center w-full max-w-3xl mx-auto"
                 style={{ 
-                  color: theme?.colors?.textSecondary || '#6b7280',
-                  borderColor: `${theme?.colors?.primary || '#3b82f6'}50`,
-                  fontFamily: theme?.fonts?.secondary || 'Inter, system-ui, sans-serif',
-                  fontSize: theme?.typography?.body || '1rem',
-                  fontWeight: theme?.typography?.bodyWeight || 400,
-                  borderRadius: theme?.borderRadius?.lg || '12px'
+                  color: currentColorTheme.colors.textSecondary,
+                  borderColor: `${currentColorTheme.colors.primary}50`,
+                  fontFamily: currentFontTheme.fonts.secondary,
+                  fontSize: currentFontTheme.typography.body,
+                  fontWeight: currentFontTheme.typography.bodyWeight,
+                  borderRadius: currentFontTheme.borderRadius.lg
                 }}
                 placeholder="Enter subtitle"
               />
@@ -73,11 +74,11 @@ const ContactForm: React.FC<ContactFormProps> = ({ content, isEditing, onChange,
                 viewport={{ once: true }}
                 className="mb-4"
                 style={{ 
-                  color: theme?.colors?.primary || '#3b82f6',
-                  fontFamily: theme?.fonts?.primary || 'Inter, system-ui, sans-serif',
-                  fontSize: 'clamp(1.5rem, 4vw, 2.5rem)',
-                  fontWeight: theme?.typography?.headingWeight || 700,
-                  lineHeight: theme?.typography?.headingLineHeight || 1.2
+                  color: currentColorTheme.colors.primary,
+                  fontFamily: currentFontTheme.fonts.primary,
+                  fontSize: currentFontTheme.typography.h2,
+                  fontWeight: currentFontTheme.typography.headingWeight,
+                  lineHeight: currentFontTheme.typography.headingLineHeight
                 }}
               >
                 {content.title}
@@ -88,11 +89,11 @@ const ContactForm: React.FC<ContactFormProps> = ({ content, isEditing, onChange,
                 transition={{ duration: 0.6, delay: 0.2 }}
                 viewport={{ once: true }}
                 style={{ 
-                  color: theme?.colors?.textSecondary || '#6b7280',
-                  fontFamily: theme?.fonts?.secondary || 'Inter, system-ui, sans-serif',
-                  fontSize: theme?.typography?.body || '1rem',
-                  fontWeight: theme?.typography?.bodyWeight || 400,
-                  lineHeight: theme?.typography?.bodyLineHeight || 1.6
+                  color: currentColorTheme.colors.textSecondary,
+                  fontFamily: currentFontTheme.fonts.secondary,
+                  fontSize: currentFontTheme.typography.body,
+                  fontWeight: currentFontTheme.typography.bodyWeight,
+                  lineHeight: currentFontTheme.typography.bodyLineHeight
                 }}
               >
                 {content.subtitle}
@@ -114,20 +115,20 @@ const ContactForm: React.FC<ContactFormProps> = ({ content, isEditing, onChange,
               <div 
                 className="w-12 h-12 flex items-center justify-center"
                 style={{ 
-                  backgroundColor: `${theme?.colors?.primary || '#3b82f6'}20`,
-                  borderRadius: theme?.borderRadius?.lg || '12px'
+                  backgroundColor: `${currentColorTheme.colors.primary}20`,
+                  borderRadius: currentFontTheme.borderRadius.lg
                 }}
               >
-                <Mail className="w-6 h-6" style={{ color: theme?.colors?.primary || '#3b82f6' }} />
+                <Mail className="w-6 h-6" style={{ color: currentColorTheme.colors.primary }} />
               </div>
               <div>
                 <h3 
                   className="mb-1"
                   style={{ 
-                    color: theme?.colors?.text || '#111827',
-                    fontFamily: theme?.fonts?.primary || 'Inter, system-ui, sans-serif',
-                    fontSize: theme?.typography?.h4 || '1.125rem',
-                    fontWeight: theme?.typography?.headingWeight || 700
+                    color: currentColorTheme.colors.text,
+                    fontFamily: currentFontTheme.fonts.primary,
+                    fontSize: currentFontTheme.typography.h4,
+                    fontWeight: currentFontTheme.typography.headingWeight
                   }}
                 >
                   Email
@@ -139,21 +140,21 @@ const ContactForm: React.FC<ContactFormProps> = ({ content, isEditing, onChange,
                     onChange={(e) => handleChange('email', e.target.value)}
                     className="bg-transparent border-2 border-dashed rounded-lg p-1"
                     style={{ 
-                      color: theme?.colors?.textSecondary || '#6b7280',
-                      borderColor: `${theme?.colors?.primary || '#3b82f6'}50`,
-                      fontFamily: theme?.fonts?.secondary || 'Inter, system-ui, sans-serif',
-                      fontSize: theme?.typography?.body || '1rem',
-                      borderRadius: theme?.borderRadius?.md || '8px'
+                      color: currentColorTheme.colors.textSecondary,
+                      borderColor: `${currentColorTheme.colors.primary}50`,
+                      fontFamily: currentFontTheme.fonts.secondary,
+                      fontSize: currentFontTheme.typography.body,
+                      borderRadius: currentFontTheme.borderRadius.md
                     }}
                     placeholder="email@example.com"
                   />
                 ) : (
                   <p 
                     style={{ 
-                      color: theme?.colors?.textSecondary || '#6b7280',
-                      fontFamily: theme?.fonts?.secondary || 'Inter, system-ui, sans-serif',
-                      fontSize: theme?.typography?.body || '1rem',
-                      fontWeight: theme?.typography?.bodyWeight || 400
+                      color: currentColorTheme.colors.textSecondary,
+                      fontFamily: currentFontTheme.fonts.secondary,
+                      fontSize: currentFontTheme.typography.body,
+                      fontWeight: currentFontTheme.typography.bodyWeight
                     }}
                   >
                     {content.email}

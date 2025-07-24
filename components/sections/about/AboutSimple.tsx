@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Check } from 'lucide-react';
-import { ThemeConfig } from '../../../types';
+import { useTheme } from '../../../contexts/ThemeContext';
 
 interface AboutSimpleProps {
   content: {
@@ -12,11 +12,12 @@ interface AboutSimpleProps {
   };
   isEditing: boolean;
   onChange: (content: any) => void;
-  theme?: ThemeConfig;
   onIconClick?: (field: string) => void;
 }
 
-const AboutSimple: React.FC<AboutSimpleProps> = ({ content, isEditing, onChange, theme, onIconClick }) => {
+const AboutSimple: React.FC<AboutSimpleProps> = ({ content, isEditing, onChange, onIconClick }) => {
+  const { currentColorTheme, currentFontTheme } = useTheme();
+
   const handleChange = (field: string, value: any) => {
     onChange({ ...content, [field]: value });
   };
@@ -31,8 +32,8 @@ const AboutSimple: React.FC<AboutSimpleProps> = ({ content, isEditing, onChange,
     <section 
       className="py-20"
       style={{ 
-        backgroundColor: theme?.colors?.surface || '#ffffff',
-        fontFamily: theme?.fonts?.primary || 'Inter, system-ui, sans-serif'
+        backgroundColor: currentColorTheme.colors.surface,
+        fontFamily: currentFontTheme.fonts.primary
       }}
     >
       <div className="max-w-7xl mx-auto px-4">
@@ -46,12 +47,12 @@ const AboutSimple: React.FC<AboutSimpleProps> = ({ content, isEditing, onChange,
                   onChange={(e) => handleChange('title', e.target.value)}
                   className="mb-6 bg-transparent border-2 border-dashed rounded-lg p-2 w-full"
                   style={{ 
-                    color: theme?.colors?.primary || '#3b82f6',
-                    borderColor: `${theme?.colors?.primary || '#3b82f6'}50`,
-                    fontFamily: theme?.fonts?.primary || 'Inter, system-ui, sans-serif',
-                    fontSize: 'clamp(1.5rem, 4vw, 2.5rem)',
-                    fontWeight: theme?.typography?.headingWeight || 700,
-                    borderRadius: theme?.borderRadius?.lg || '12px'
+                    color: currentColorTheme.colors.primary,
+                    borderColor: `${currentColorTheme.colors.primary}50`,
+                    fontFamily: currentFontTheme.fonts.primary,
+                    fontSize: currentFontTheme.typography.h2,
+                    fontWeight: currentFontTheme.typography.headingWeight,
+                    borderRadius: currentFontTheme.borderRadius.lg
                   }}
                   placeholder="Enter title"
                 />
@@ -60,12 +61,12 @@ const AboutSimple: React.FC<AboutSimpleProps> = ({ content, isEditing, onChange,
                   onChange={(e) => handleChange('description', e.target.value)}
                   className="mb-6 bg-transparent border-2 border-dashed rounded-lg p-2 w-full resize-none"
                   style={{ 
-                    color: theme?.colors?.textSecondary || '#6b7280',
-                    borderColor: `${theme?.colors?.primary || '#3b82f6'}50`,
-                    fontFamily: theme?.fonts?.secondary || 'Inter, system-ui, sans-serif',
-                    fontSize: theme?.typography?.body || '1rem',
-                    fontWeight: theme?.typography?.bodyWeight || 400,
-                    borderRadius: theme?.borderRadius?.lg || '12px'
+                    color: currentColorTheme.colors.textSecondary,
+                    borderColor: `${currentColorTheme.colors.primary}50`,
+                    fontFamily: currentFontTheme.fonts.secondary,
+                    fontSize: currentFontTheme.typography.body,
+                    fontWeight: currentFontTheme.typography.bodyWeight,
+                    borderRadius: currentFontTheme.borderRadius.lg
                   }}
                   placeholder="Enter description"
                   rows={4}
@@ -75,8 +76,8 @@ const AboutSimple: React.FC<AboutSimpleProps> = ({ content, isEditing, onChange,
                     <div 
                       className="w-5 h-5 rounded-full flex items-center justify-center"
                       style={{ 
-                        backgroundColor: theme?.colors?.success || '#10b981',
-                        borderRadius: theme?.borderRadius?.full || '50%'
+                        backgroundColor: currentColorTheme.colors.success,
+                        borderRadius: currentFontTheme.borderRadius.full
                       }}
                     >
                       <Check className="w-3 h-3 text-white" />
@@ -87,11 +88,11 @@ const AboutSimple: React.FC<AboutSimpleProps> = ({ content, isEditing, onChange,
                       onChange={(e) => handleFeatureChange(index, e.target.value)}
                       className="flex-1 bg-transparent border-2 border-dashed rounded-lg p-1"
                       style={{ 
-                        color: theme?.colors?.text || '#111827',
-                        borderColor: `${theme?.colors?.primary || '#3b82f6'}50`,
-                        fontFamily: theme?.fonts?.secondary || 'Inter, system-ui, sans-serif',
-                        fontSize: theme?.typography?.body || '1rem',
-                        borderRadius: theme?.borderRadius?.md || '8px'
+                        color: currentColorTheme.colors.text,
+                        borderColor: `${currentColorTheme.colors.primary}50`,
+                        fontFamily: currentFontTheme.fonts.secondary,
+                        fontSize: currentFontTheme.typography.body,
+                        borderRadius: currentFontTheme.borderRadius.md
                       }}
                       placeholder="Feature"
                     />
@@ -107,11 +108,11 @@ const AboutSimple: React.FC<AboutSimpleProps> = ({ content, isEditing, onChange,
                   viewport={{ once: true }}
                   className="mb-6"
                   style={{ 
-                    color: theme?.colors?.primary || '#3b82f6',
-                    fontFamily: theme?.fonts?.primary || 'Inter, system-ui, sans-serif',
-                    fontSize: 'clamp(1.5rem, 4vw, 2.5rem)',
-                    fontWeight: theme?.typography?.headingWeight || 700,
-                    lineHeight: theme?.typography?.headingLineHeight || 1.2
+                    color: currentColorTheme.colors.primary,
+                    fontFamily: currentFontTheme.fonts.primary,
+                    fontSize: currentFontTheme.typography.h2,
+                    fontWeight: currentFontTheme.typography.headingWeight,
+                    lineHeight: currentFontTheme.typography.headingLineHeight
                   }}
                 >
                   {content.title}
@@ -123,11 +124,11 @@ const AboutSimple: React.FC<AboutSimpleProps> = ({ content, isEditing, onChange,
                   viewport={{ once: true }}
                   className="mb-6"
                   style={{ 
-                    color: theme?.colors?.textSecondary || '#6b7280',
-                    fontFamily: theme?.fonts?.secondary || 'Inter, system-ui, sans-serif',
-                    fontSize: theme?.typography?.body || '1rem',
-                    fontWeight: theme?.typography?.bodyWeight || 400,
-                    lineHeight: theme?.typography?.bodyLineHeight || 1.6
+                    color: currentColorTheme.colors.textSecondary,
+                    fontFamily: currentFontTheme.fonts.secondary,
+                    fontSize: currentFontTheme.typography.body,
+                    fontWeight: currentFontTheme.typography.bodyWeight,
+                    lineHeight: currentFontTheme.typography.bodyLineHeight
                   }}
                 >
                   {content.description}
@@ -144,18 +145,18 @@ const AboutSimple: React.FC<AboutSimpleProps> = ({ content, isEditing, onChange,
                     <div 
                       className="w-5 h-5 rounded-full flex items-center justify-center"
                       style={{ 
-                        backgroundColor: theme?.colors?.success || '#10b981',
-                        borderRadius: theme?.borderRadius?.full || '50%'
+                        backgroundColor: currentColorTheme.colors.success,
+                        borderRadius: currentFontTheme.borderRadius.full
                       }}
                     >
                       <Check className="w-3 h-3 text-white" />
                     </div>
                     <span 
                       style={{ 
-                        color: theme?.colors?.text || '#111827',
-                        fontFamily: theme?.fonts?.secondary || 'Inter, system-ui, sans-serif',
-                        fontSize: theme?.typography?.body || '1rem',
-                        fontWeight: theme?.typography?.bodyWeight || 400
+                        color: currentColorTheme.colors.text,
+                        fontFamily: currentFontTheme.fonts.secondary,
+                        fontSize: currentFontTheme.typography.body,
+                        fontWeight: currentFontTheme.typography.bodyWeight
                       }}
                     >
                       {feature}
@@ -173,11 +174,11 @@ const AboutSimple: React.FC<AboutSimpleProps> = ({ content, isEditing, onChange,
                 onChange={(e) => handleChange('image', e.target.value)}
                 className="w-full h-96 border-2 border-dashed p-4 text-center"
                 style={{ 
-                  borderColor: theme?.colors?.border || '#d1d5db',
-                  backgroundColor: theme?.colors?.background || '#f9fafb',
-                  color: theme?.colors?.textSecondary || '#6b7280',
-                  fontFamily: theme?.fonts?.secondary || 'Inter, system-ui, sans-serif',
-                  borderRadius: theme?.borderRadius?.xl || '16px'
+                  borderColor: currentColorTheme.colors.border,
+                  backgroundColor: currentColorTheme.colors.background,
+                  color: currentColorTheme.colors.textSecondary,
+                  fontFamily: currentFontTheme.fonts.secondary,
+                  borderRadius: currentFontTheme.borderRadius.xl
                 }}
                 placeholder="Image URL"
               />
@@ -191,8 +192,8 @@ const AboutSimple: React.FC<AboutSimpleProps> = ({ content, isEditing, onChange,
                 alt={content.title} 
                 className="w-full"
                 style={{ 
-                  boxShadow: theme?.shadows?.lg || '0 10px 15px -3px rgb(0 0 0 / 0.1)',
-                  borderRadius: theme?.borderRadius?.xl || '16px'
+                  boxShadow: currentColorTheme.shadows.lg,
+                  borderRadius: currentFontTheme.borderRadius.xl
                 }}
               />
             )}

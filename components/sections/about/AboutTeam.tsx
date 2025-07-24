@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { ThemeDefinition } from '../../../core/ThemeRegistry';
+import { useTheme } from '../../../contexts/ThemeContext';
 
 interface TeamMember {
   name: string;
@@ -17,10 +17,11 @@ interface AboutTeamProps {
   };
   isEditing: boolean;
   onChange: (content: any) => void;
-  theme?: ThemeDefinition;
 }
 
-const AboutTeam: React.FC<AboutTeamProps> = ({ content, isEditing, onChange, theme }) => {
+const AboutTeam: React.FC<AboutTeamProps> = ({ content, isEditing, onChange }) => {
+  const { currentColorTheme, currentFontTheme } = useTheme();
+
   const handleChange = (field: string, value: any) => {
     onChange({ ...content, [field]: value });
   };
@@ -35,8 +36,8 @@ const AboutTeam: React.FC<AboutTeamProps> = ({ content, isEditing, onChange, the
     <section 
       className="py-20"
       style={{ 
-        backgroundColor: theme?.colors?.background || '#f9fafb',
-        fontFamily: theme?.fonts?.primary || 'Inter, system-ui, sans-serif'
+        backgroundColor: currentColorTheme.colors.background,
+        fontFamily: currentFontTheme.fonts.primary
       }}
     >
       <div className="max-w-7xl mx-auto px-4">
@@ -49,12 +50,12 @@ const AboutTeam: React.FC<AboutTeamProps> = ({ content, isEditing, onChange, the
                 onChange={(e) => handleChange('title', e.target.value)}
                 className="mb-4 bg-transparent border-2 border-dashed rounded-lg p-2 text-center w-full max-w-2xl mx-auto"
                 style={{ 
-                  color: theme?.colors?.primary || '#3b82f6',
-                  borderColor: `${theme?.colors?.primary || '#3b82f6'}50`,
-                  fontFamily: theme?.fonts?.primary || 'Inter, system-ui, sans-serif',
-                  fontSize: 'clamp(1.5rem, 4vw, 2.5rem)',
-                  fontWeight: theme?.typography?.headingWeight || 700,
-                  borderRadius: theme?.borderRadius?.lg || '12px'
+                  color: currentColorTheme.colors.primary,
+                  borderColor: `${currentColorTheme.colors.primary}50`,
+                  fontFamily: currentFontTheme.fonts.primary,
+                  fontSize: currentFontTheme.typography.h2,
+                  fontWeight: currentFontTheme.typography.headingWeight,
+                  borderRadius: currentFontTheme.borderRadius.lg
                 }}
                 placeholder="Enter title"
               />
@@ -64,12 +65,12 @@ const AboutTeam: React.FC<AboutTeamProps> = ({ content, isEditing, onChange, the
                 onChange={(e) => handleChange('subtitle', e.target.value)}
                 className="bg-transparent border-2 border-dashed rounded-lg p-2 text-center w-full max-w-3xl mx-auto"
                 style={{ 
-                  color: theme?.colors?.textSecondary || '#6b7280',
-                  borderColor: `${theme?.colors?.primary || '#3b82f6'}50`,
-                  fontFamily: theme?.fonts?.secondary || 'Inter, system-ui, sans-serif',
-                  fontSize: theme?.typography?.body || '1rem',
-                  fontWeight: theme?.typography?.bodyWeight || 400,
-                  borderRadius: theme?.borderRadius?.lg || '12px'
+                  color: currentColorTheme.colors.textSecondary,
+                  borderColor: `${currentColorTheme.colors.primary}50`,
+                  fontFamily: currentFontTheme.fonts.secondary,
+                  fontSize: currentFontTheme.typography.body,
+                  fontWeight: currentFontTheme.typography.bodyWeight,
+                  borderRadius: currentFontTheme.borderRadius.lg
                 }}
                 placeholder="Enter subtitle"
               />
@@ -83,11 +84,11 @@ const AboutTeam: React.FC<AboutTeamProps> = ({ content, isEditing, onChange, the
                 viewport={{ once: true }}
                 className="mb-4"
                 style={{ 
-                  color: theme?.colors?.primary || '#3b82f6',
-                  fontFamily: theme?.fonts?.primary || 'Inter, system-ui, sans-serif',
-                  fontSize: 'clamp(1.5rem, 4vw, 2.5rem)',
-                  fontWeight: theme?.typography?.headingWeight || 700,
-                  lineHeight: theme?.typography?.headingLineHeight || 1.2
+                  color: currentColorTheme.colors.primary,
+                  fontFamily: currentFontTheme.fonts.primary,
+                  fontSize: currentFontTheme.typography.h2,
+                  fontWeight: currentFontTheme.typography.headingWeight,
+                  lineHeight: currentFontTheme.typography.headingLineHeight
                 }}
               >
                 {content.title}
@@ -99,11 +100,11 @@ const AboutTeam: React.FC<AboutTeamProps> = ({ content, isEditing, onChange, the
                 viewport={{ once: true }}
                 className="max-w-3xl mx-auto"
                 style={{ 
-                  color: theme?.colors?.textSecondary || '#6b7280',
-                  fontFamily: theme?.fonts?.secondary || 'Inter, system-ui, sans-serif',
-                  fontSize: theme?.typography?.body || '1rem',
-                  fontWeight: theme?.typography?.bodyWeight || 400,
-                  lineHeight: theme?.typography?.bodyLineHeight || 1.6
+                  color: currentColorTheme.colors.textSecondary,
+                  fontFamily: currentFontTheme.fonts.secondary,
+                  fontSize: currentFontTheme.typography.body,
+                  fontWeight: currentFontTheme.typography.bodyWeight,
+                  lineHeight: currentFontTheme.typography.bodyLineHeight
                 }}
               >
                 {content.subtitle}
@@ -122,9 +123,9 @@ const AboutTeam: React.FC<AboutTeamProps> = ({ content, isEditing, onChange, the
               viewport={{ once: true }}
               className="text-center p-6"
               style={{ 
-                backgroundColor: theme?.colors?.surface || '#ffffff',
-                boxShadow: theme?.shadows?.lg || '0 10px 15px -3px rgb(0 0 0 / 0.1)',
-                borderRadius: theme?.borderRadius?.xl || '16px'
+                backgroundColor: currentColorTheme.colors.surface,
+                boxShadow: currentColorTheme.shadows.lg,
+                borderRadius: currentFontTheme.borderRadius.xl
               }}
             >
               {isEditing ? (
@@ -135,10 +136,10 @@ const AboutTeam: React.FC<AboutTeamProps> = ({ content, isEditing, onChange, the
                     onChange={(e) => handleMemberChange(index, 'image', e.target.value)}
                     className="w-24 h-24 rounded-full mx-auto mb-4 border-2 border-dashed p-2 text-center text-xs"
                     style={{ 
-                      borderColor: theme?.colors?.border || '#d1d5db',
-                      color: theme?.colors?.textSecondary || '#6b7280',
-                      fontFamily: theme?.fonts?.secondary || 'Inter, system-ui, sans-serif',
-                      borderRadius: theme?.borderRadius?.full || '50%'
+                      borderColor: currentColorTheme.colors.border,
+                      color: currentColorTheme.colors.textSecondary,
+                      fontFamily: currentFontTheme.fonts.secondary,
+                      borderRadius: currentFontTheme.borderRadius.full
                     }}
                     placeholder="Image URL"
                   />
@@ -148,12 +149,12 @@ const AboutTeam: React.FC<AboutTeamProps> = ({ content, isEditing, onChange, the
                     onChange={(e) => handleMemberChange(index, 'name', e.target.value)}
                     className="mb-2 bg-transparent border-2 border-dashed rounded-lg p-1 w-full text-center"
                     style={{ 
-                      color: theme?.colors?.text || '#111827',
-                      borderColor: `${theme?.colors?.primary || '#3b82f6'}50`,
-                      fontFamily: theme?.fonts?.primary || 'Inter, system-ui, sans-serif',
-                      fontSize: theme?.typography?.h3 || '1.25rem',
-                      fontWeight: theme?.typography?.headingWeight || 700,
-                      borderRadius: theme?.borderRadius?.md || '8px'
+                      color: currentColorTheme.colors.text,
+                      borderColor: `${currentColorTheme.colors.primary}50`,
+                      fontFamily: currentFontTheme.fonts.primary,
+                      fontSize: currentFontTheme.typography.h3,
+                      fontWeight: currentFontTheme.typography.headingWeight,
+                      borderRadius: currentFontTheme.borderRadius.md
                     }}
                     placeholder="Name"
                   />
@@ -163,12 +164,12 @@ const AboutTeam: React.FC<AboutTeamProps> = ({ content, isEditing, onChange, the
                     onChange={(e) => handleMemberChange(index, 'role', e.target.value)}
                     className="mb-3 bg-transparent border-2 border-dashed rounded-lg p-1 w-full text-center"
                     style={{ 
-                      color: theme?.colors?.primary || '#3b82f6',
-                      borderColor: `${theme?.colors?.primary || '#3b82f6'}50`,
-                      fontFamily: theme?.fonts?.secondary || 'Inter, system-ui, sans-serif',
-                      fontSize: theme?.typography?.body || '1rem',
-                      fontWeight: theme?.typography?.bodyWeight || 400,
-                      borderRadius: theme?.borderRadius?.md || '8px'
+                      color: currentColorTheme.colors.primary,
+                      borderColor: `${currentColorTheme.colors.primary}50`,
+                      fontFamily: currentFontTheme.fonts.secondary,
+                      fontSize: currentFontTheme.typography.body,
+                      fontWeight: currentFontTheme.typography.bodyWeight,
+                      borderRadius: currentFontTheme.borderRadius.md
                     }}
                     placeholder="Role"
                   />
@@ -177,12 +178,12 @@ const AboutTeam: React.FC<AboutTeamProps> = ({ content, isEditing, onChange, the
                     onChange={(e) => handleMemberChange(index, 'bio', e.target.value)}
                     className="bg-transparent border-2 border-dashed rounded-lg p-2 w-full resize-none"
                     style={{ 
-                      color: theme?.colors?.textSecondary || '#6b7280',
-                      borderColor: `${theme?.colors?.primary || '#3b82f6'}50`,
-                      fontFamily: theme?.fonts?.secondary || 'Inter, system-ui, sans-serif',
-                      fontSize: theme?.typography?.small || '0.875rem',
-                      fontWeight: theme?.typography?.bodyWeight || 400,
-                      borderRadius: theme?.borderRadius?.md || '8px'
+                      color: currentColorTheme.colors.textSecondary,
+                      borderColor: `${currentColorTheme.colors.primary}50`,
+                      fontFamily: currentFontTheme.fonts.secondary,
+                      fontSize: currentFontTheme.typography.small,
+                      fontWeight: currentFontTheme.typography.bodyWeight,
+                      borderRadius: currentFontTheme.borderRadius.md
                     }}
                     placeholder="Bio"
                     rows={3}
@@ -195,17 +196,17 @@ const AboutTeam: React.FC<AboutTeamProps> = ({ content, isEditing, onChange, the
                     alt={member.name}
                     className="w-24 h-24 mx-auto mb-4 object-cover"
                     style={{ 
-                      borderRadius: theme?.borderRadius?.full || '50%',
-                      border: `2px solid ${theme?.colors?.border || '#d1d5db'}`
+                      borderRadius: currentFontTheme.borderRadius.full,
+                      border: `2px solid ${currentColorTheme.colors.border}`
                     }}
                   />
                   <h3 
                     className="mb-2"
                     style={{ 
-                      color: theme?.colors?.text || '#111827',
-                      fontFamily: theme?.fonts?.primary || 'Inter, system-ui, sans-serif',
-                      fontSize: theme?.typography?.h3 || '1.25rem',
-                      fontWeight: theme?.typography?.headingWeight || 700
+                      color: currentColorTheme.colors.text,
+                      fontFamily: currentFontTheme.fonts.primary,
+                      fontSize: currentFontTheme.typography.h3,
+                      fontWeight: currentFontTheme.typography.headingWeight
                     }}
                   >
                     {member.name}
@@ -213,21 +214,21 @@ const AboutTeam: React.FC<AboutTeamProps> = ({ content, isEditing, onChange, the
                   <p 
                     className="mb-3"
                     style={{ 
-                      color: theme?.colors?.primary || '#3b82f6',
-                      fontFamily: theme?.fonts?.secondary || 'Inter, system-ui, sans-serif',
-                      fontSize: theme?.typography?.body || '1rem',
-                      fontWeight: theme?.typography?.bodyWeight || 400
+                      color: currentColorTheme.colors.primary,
+                      fontFamily: currentFontTheme.fonts.secondary,
+                      fontSize: currentFontTheme.typography.body,
+                      fontWeight: currentFontTheme.typography.bodyWeight
                     }}
                   >
                     {member.role}
                   </p>
                   <p 
                     style={{ 
-                      color: theme?.colors?.textSecondary || '#6b7280',
-                      fontFamily: theme?.fonts?.secondary || 'Inter, system-ui, sans-serif',
-                      fontSize: theme?.typography?.small || '0.875rem',
-                      fontWeight: theme?.typography?.bodyWeight || 400,
-                      lineHeight: theme?.typography?.bodyLineHeight || 1.6
+                      color: currentColorTheme.colors.textSecondary,
+                      fontFamily: currentFontTheme.fonts.secondary,
+                      fontSize: currentFontTheme.typography.small,
+                      fontWeight: currentFontTheme.typography.bodyWeight,
+                      lineHeight: currentFontTheme.typography.bodyLineHeight
                     }}
                   >
                     {member.bio}

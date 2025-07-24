@@ -1,36 +1,90 @@
 import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
-import { ThemeConfig } from '../types';
 
 interface ThemeContextType {
-  currentTheme: ThemeConfig;
-  availableThemes: ThemeConfig[];
-  availableFonts: FontCollection[];
-  updateTheme: (themeId: string) => void;
-  updateFonts: (fontCollectionId: string) => void;
-  applyCustomColors: (colors: Partial<ThemeConfig['colors']>) => void;
+  currentColorTheme: ColorTheme;
+  currentFontTheme: FontTheme;
+  availableColorThemes: ColorTheme[];
+  availableFontThemes: FontTheme[];
+  updateColorTheme: (themeId: string) => void;
+  updateFontTheme: (themeId: string) => void;
   getCSSVariables: () => Record<string, string>;
 }
 
-interface FontCollection {
+interface ColorTheme {
   id: string;
   name: string;
+  category: 'modern' | 'classic' | 'minimal' | 'bold' | 'elegant';
+  colors: {
+    primary: string;
+    secondary: string;
+    accent: string;
+    background: string;
+    surface: string;
+    text: string;
+    textSecondary: string;
+    border: string;
+    success: string;
+    warning: string;
+    error: string;
+    primary100: string;
+    primary200: string;
+    primary300: string;
+    secondary100: string;
+    secondary200: string;
+    accent100: string;
+    accent200: string;
+  };
+  shadows: {
+    sm: string;
+    md: string;
+    lg: string;
+    xl: string;
+  };
+}
+
+interface FontTheme {
+  id: string;
+  name: string;
+  category: 'modern' | 'classic' | 'minimal' | 'creative' | 'professional';
   fonts: {
     primary: string;
     secondary: string;
     accent: string;
   };
-  description: string;
+  typography: {
+    h1: string;
+    h2: string;
+    h3: string;
+    h4: string;
+    body: string;
+    small: string;
+    button: string;
+    subtitle: string;
+    headingWeight: number;
+    bodyWeight: number;
+    buttonWeight: number;
+    headingLineHeight: number;
+    bodyLineHeight: number;
+  };
+  borderRadius: {
+    sm: string;
+    md: string;
+    lg: string;
+    xl: string;
+    full: string;
+  };
 }
 
-// Expanded Color Collections
-const colorCollections: ThemeConfig[] = [
+// Color Theme Collections
+const colorThemes: ColorTheme[] = [
   {
-    id: 'modern-blue',
-    name: 'Ocean Breeze',
+    id: 'ocean-blue',
+    name: 'Ocean Blue',
+    category: 'modern',
     colors: {
       primary: '#0ea5e9',
-      secondary: '#71717a',
-      accent: '#d946ef',
+      secondary: '#06b6d4',
+      accent: '#8b5cf6',
       background: '#ffffff',
       surface: '#ffffff',
       text: '#18181b',
@@ -42,84 +96,22 @@ const colorCollections: ThemeConfig[] = [
       primary100: '#f0f9ff',
       primary200: '#e0f2fe',
       primary300: '#bae6fd',
-      secondary100: '#fafafa',
-      secondary200: '#f4f4f5',
-      accent100: '#fdf4ff',
-      accent200: '#fae8ff',
+      secondary100: '#cffafe',
+      secondary200: '#a5f3fc',
+      accent100: '#f3e8ff',
+      accent200: '#e9d5ff',
     },
-    fonts: { primary: 'Inter', secondary: 'Poppins', accent: 'Inter' },
     shadows: {
-      sm: '0 2px 8px rgba(0, 0, 0, 0.04)',
-      md: '0 4px 16px rgba(0, 0, 0, 0.08)',
-      lg: '0 8px 32px rgba(0, 0, 0, 0.12)',
-      xl: '0 16px 64px rgba(0, 0, 0, 0.16)',
-    },
-  },
-  {
-    id: 'dark-mode',
-    name: 'Midnight Dark',
-    colors: {
-      primary: '#0ea5e9',
-      secondary: '#ffffff',
-      accent: '#d946ef',
-      background: '#18181b',
-      surface: '#27272a',
-      text: '#ffffff',
-      textSecondary: '#a1a1aa',
-      border: '#3f3f46',
-      success: '#22c55e',
-      warning: '#f59e0b',
-      error: '#ef4444',
-      primary100: '#f0f9ff',
-      primary200: '#e0f2fe',
-      primary300: '#bae6fd',
-      secondary100: '#fafafa',
-      secondary200: '#f4f4f5',
-      accent100: '#fdf4ff',
-      accent200: '#fae8ff',
-    },
-    fonts: { primary: 'Inter', secondary: 'Poppins', accent: 'Inter' },
-    shadows: {
-      sm: '0 2px 8px rgba(0, 0, 0, 0.3)',
-      md: '0 4px 16px rgba(0, 0, 0, 0.3)',
-      lg: '0 8px 32px rgba(0, 0, 0, 0.3)',
-      xl: '0 16px 64px rgba(0, 0, 0, 0.3)',
-    },
-  },
-  {
-    id: 'vibrant-gradient',
-    name: 'Purple Passion',
-    colors: {
-      primary: '#8b5cf6',
-      secondary: '#06b6d4',
-      accent: '#f59e0b',
-      background: '#ffffff',
-      surface: '#ffffff',
-      text: '#1f2937',
-      textSecondary: '#6b7280',
-      border: '#e5e7eb',
-      success: '#10b981',
-      warning: '#f59e0b',
-      error: '#ef4444',
-      primary100: '#f3e8ff',
-      primary200: '#e9d5ff',
-      primary300: '#d8b4fe',
-      secondary100: '#ecfeff',
-      secondary200: '#cffafe',
-      accent100: '#fffbeb',
-      accent200: '#fef3c7',
-    },
-    fonts: { primary: 'Inter', secondary: 'Poppins', accent: 'Inter' },
-    shadows: {
-      sm: '0 2px 8px rgba(139, 92, 246, 0.1)',
-      md: '0 4px 16px rgba(139, 92, 246, 0.15)',
-      lg: '0 8px 32px rgba(139, 92, 246, 0.2)',
-      xl: '0 16px 64px rgba(139, 92, 246, 0.25)',
+      sm: '0 2px 8px rgba(14, 165, 233, 0.08)',
+      md: '0 4px 16px rgba(14, 165, 233, 0.12)',
+      lg: '0 8px 32px rgba(14, 165, 233, 0.16)',
+      xl: '0 16px 64px rgba(14, 165, 233, 0.20)',
     },
   },
   {
     id: 'forest-green',
     name: 'Forest Green',
+    category: 'modern',
     colors: {
       primary: '#059669',
       secondary: '#0d9488',
@@ -140,17 +132,17 @@ const colorCollections: ThemeConfig[] = [
       accent100: '#fffbeb',
       accent200: '#fef3c7',
     },
-    fonts: { primary: 'Inter', secondary: 'Poppins', accent: 'Inter' },
     shadows: {
-      sm: '0 2px 8px rgba(5, 150, 105, 0.1)',
-      md: '0 4px 16px rgba(5, 150, 105, 0.15)',
-      lg: '0 8px 32px rgba(5, 150, 105, 0.2)',
-      xl: '0 16px 64px rgba(5, 150, 105, 0.25)',
+      sm: '0 2px 8px rgba(5, 150, 105, 0.08)',
+      md: '0 4px 16px rgba(5, 150, 105, 0.12)',
+      lg: '0 8px 32px rgba(5, 150, 105, 0.16)',
+      xl: '0 16px 64px rgba(5, 150, 105, 0.20)',
     },
   },
   {
     id: 'sunset-orange',
     name: 'Sunset Orange',
+    category: 'bold',
     colors: {
       primary: '#ea580c',
       secondary: '#dc2626',
@@ -171,20 +163,20 @@ const colorCollections: ThemeConfig[] = [
       accent100: '#f3e8ff',
       accent200: '#e9d5ff',
     },
-    fonts: { primary: 'Inter', secondary: 'Poppins', accent: 'Inter' },
     shadows: {
-      sm: '0 2px 8px rgba(234, 88, 12, 0.1)',
-      md: '0 4px 16px rgba(234, 88, 12, 0.15)',
-      lg: '0 8px 32px rgba(234, 88, 12, 0.2)',
-      xl: '0 16px 64px rgba(234, 88, 12, 0.25)',
+      sm: '0 2px 8px rgba(234, 88, 12, 0.08)',
+      md: '0 4px 16px rgba(234, 88, 12, 0.12)',
+      lg: '0 8px 32px rgba(234, 88, 12, 0.16)',
+      xl: '0 16px 64px rgba(234, 88, 12, 0.20)',
     },
   },
   {
-    id: 'rose-gold',
-    name: 'Rose Gold',
+    id: 'royal-purple',
+    name: 'Royal Purple',
+    category: 'elegant',
     colors: {
-      primary: '#e11d48',
-      secondary: '#ec4899',
+      primary: '#8b5cf6',
+      secondary: '#a855f7',
       accent: '#f59e0b',
       background: '#ffffff',
       surface: '#ffffff',
@@ -194,203 +186,330 @@ const colorCollections: ThemeConfig[] = [
       success: '#10b981',
       warning: '#f59e0b',
       error: '#ef4444',
-      primary100: '#fff1f2',
-      primary200: '#ffe4e6',
-      primary300: '#fecdd3',
-      secondary100: '#fdf2f8',
-      secondary200: '#fce7f3',
+      primary100: '#f3e8ff',
+      primary200: '#e9d5ff',
+      primary300: '#d8b4fe',
+      secondary100: '#faf5ff',
+      secondary200: '#f3e8ff',
       accent100: '#fffbeb',
       accent200: '#fef3c7',
     },
-    fonts: { primary: 'Inter', secondary: 'Poppins', accent: 'Inter' },
     shadows: {
-      sm: '0 2px 8px rgba(225, 29, 72, 0.1)',
-      md: '0 4px 16px rgba(225, 29, 72, 0.15)',
-      lg: '0 8px 32px rgba(225, 29, 72, 0.2)',
-      xl: '0 16px 64px rgba(225, 29, 72, 0.25)',
+      sm: '0 2px 8px rgba(139, 92, 246, 0.08)',
+      md: '0 4px 16px rgba(139, 92, 246, 0.12)',
+      lg: '0 8px 32px rgba(139, 92, 246, 0.16)',
+      xl: '0 16px 64px rgba(139, 92, 246, 0.20)',
     },
   },
   {
-    id: 'royal-blue',
-    name: 'Royal Blue',
+    id: 'midnight-dark',
+    name: 'Midnight Dark',
+    category: 'elegant',
     colors: {
-      primary: '#1d4ed8',
-      secondary: '#3730a3',
-      accent: '#f59e0b',
+      primary: '#0ea5e9',
+      secondary: '#ffffff',
+      accent: '#d946ef',
+      background: '#18181b',
+      surface: '#27272a',
+      text: '#ffffff',
+      textSecondary: '#a1a1aa',
+      border: '#3f3f46',
+      success: '#22c55e',
+      warning: '#f59e0b',
+      error: '#ef4444',
+      primary100: '#f0f9ff',
+      primary200: '#e0f2fe',
+      primary300: '#bae6fd',
+      secondary100: '#fafafa',
+      secondary200: '#f4f4f5',
+      accent100: '#fdf4ff',
+      accent200: '#fae8ff',
+    },
+    shadows: {
+      sm: '0 2px 8px rgba(0, 0, 0, 0.3)',
+      md: '0 4px 16px rgba(0, 0, 0, 0.3)',
+      lg: '0 8px 32px rgba(0, 0, 0, 0.3)',
+      xl: '0 16px 64px rgba(0, 0, 0, 0.3)',
+    },
+  },
+  {
+    id: 'minimal-gray',
+    name: 'Minimal Gray',
+    category: 'minimal',
+    colors: {
+      primary: '#000000',
+      secondary: '#6b7280',
+      accent: '#ef4444',
       background: '#ffffff',
-      surface: '#ffffff',
-      text: '#1f2937',
+      surface: '#f9fafb',
+      text: '#111827',
       textSecondary: '#6b7280',
       border: '#e5e7eb',
       success: '#10b981',
       warning: '#f59e0b',
       error: '#ef4444',
-      primary100: '#dbeafe',
-      primary200: '#bfdbfe',
-      primary300: '#93c5fd',
-      secondary100: '#e0e7ff',
-      secondary200: '#c7d2fe',
-      accent100: '#fffbeb',
-      accent200: '#fef3c7',
+      primary100: '#f3f4f6',
+      primary200: '#e5e7eb',
+      primary300: '#d1d5db',
+      secondary100: '#f9fafb',
+      secondary200: '#f3f4f6',
+      accent100: '#fef2f2',
+      accent200: '#fee2e2',
     },
-    fonts: { primary: 'Inter', secondary: 'Poppins', accent: 'Inter' },
     shadows: {
-      sm: '0 2px 8px rgba(29, 78, 216, 0.1)',
-      md: '0 4px 16px rgba(29, 78, 216, 0.15)',
-      lg: '0 8px 32px rgba(29, 78, 216, 0.2)',
-      xl: '0 16px 64px rgba(29, 78, 216, 0.25)',
-    },
-  },
-  {
-    id: 'emerald-mint',
-    name: 'Emerald Mint',
-    colors: {
-      primary: '#10b981',
-      secondary: '#06b6d4',
-      accent: '#8b5cf6',
-      background: '#ffffff',
-      surface: '#ffffff',
-      text: '#1f2937',
-      textSecondary: '#6b7280',
-      border: '#e5e7eb',
-      success: '#10b981',
-      warning: '#f59e0b',
-      error: '#ef4444',
-      primary100: '#d1fae5',
-      primary200: '#a7f3d0',
-      primary300: '#6ee7b7',
-      secondary100: '#cffafe',
-      secondary200: '#a5f3fc',
-      accent100: '#f3e8ff',
-      accent200: '#e9d5ff',
-    },
-    fonts: { primary: 'Inter', secondary: 'Poppins', accent: 'Inter' },
-    shadows: {
-      sm: '0 2px 8px rgba(16, 185, 129, 0.1)',
-      md: '0 4px 16px rgba(16, 185, 129, 0.15)',
-      lg: '0 8px 32px rgba(16, 185, 129, 0.2)',
-      xl: '0 16px 64px rgba(16, 185, 129, 0.25)',
+      sm: '0 1px 2px rgba(0, 0, 0, 0.03)',
+      md: '0 2px 4px rgba(0, 0, 0, 0.06)',
+      lg: '0 4px 8px rgba(0, 0, 0, 0.08)',
+      xl: '0 8px 16px rgba(0, 0, 0, 0.1)',
     },
   },
 ];
 
-// Expanded Font Collections
-const fontCollections: FontCollection[] = [
+// Font Theme Collections
+const fontThemes: FontTheme[] = [
   {
-    id: 'modern-clean',
-    name: 'Modern Clean',
+    id: 'modern-inter',
+    name: 'Modern Inter',
+    category: 'modern',
     fonts: {
       primary: 'Inter',
-      secondary: 'Poppins',
-      accent: 'Roboto',
+      secondary: 'Inter',
+      accent: 'Inter',
     },
-    description: 'Clean, modern fonts perfect for tech and business websites',
+    typography: {
+      h1: '2.5rem',
+      h2: '2rem',
+      h3: '1.5rem',
+      h4: '1.25rem',
+      body: '1rem',
+      small: '0.875rem',
+      button: '1rem',
+      subtitle: '1.25rem',
+      headingWeight: 700,
+      bodyWeight: 400,
+      buttonWeight: 600,
+      headingLineHeight: 1.2,
+      bodyLineHeight: 1.6,
+    },
+    borderRadius: {
+      sm: '0.25rem',
+      md: '0.5rem',
+      lg: '0.75rem',
+      xl: '1rem',
+      full: '9999px',
+    },
   },
   {
-    id: 'elegant-serif',
-    name: 'Elegant Serif',
+    id: 'elegant-playfair',
+    name: 'Elegant Playfair',
+    category: 'elegant',
     fonts: {
       primary: 'Playfair Display',
-      secondary: 'Merriweather',
-      accent: 'Lora',
+      secondary: 'Source Sans Pro',
+      accent: 'Crimson Text',
     },
-    description: 'Sophisticated serif fonts for premium brands and editorial content',
+    typography: {
+      h1: '3rem',
+      h2: '2.25rem',
+      h3: '1.75rem',
+      h4: '1.5rem',
+      body: '1.125rem',
+      small: '1rem',
+      button: '1.125rem',
+      subtitle: '1.5rem',
+      headingWeight: 700,
+      bodyWeight: 400,
+      buttonWeight: 600,
+      headingLineHeight: 1.1,
+      bodyLineHeight: 1.7,
+    },
+    borderRadius: {
+      sm: '0.125rem',
+      md: '0.375rem',
+      lg: '0.5rem',
+      xl: '0.75rem',
+      full: '9999px',
+    },
   },
   {
-    id: 'friendly-rounded',
-    name: 'Friendly Rounded',
+    id: 'friendly-nunito',
+    name: 'Friendly Nunito',
+    category: 'modern',
     fonts: {
       primary: 'Nunito',
-      secondary: 'Quicksand',
+      secondary: 'Nunito Sans',
       accent: 'Comfortaa',
     },
-    description: 'Warm, approachable fonts for lifestyle and creative brands',
-  },
-  {
-    id: 'professional-corporate',
-    name: 'Professional Corporate',
-    fonts: {
-      primary: 'Source Sans Pro',
-      secondary: 'Open Sans',
-      accent: 'Montserrat',
+    typography: {
+      h1: '2.75rem',
+      h2: '2.25rem',
+      h3: '1.75rem',
+      h4: '1.5rem',
+      body: '1.125rem',
+      small: '1rem',
+      button: '1.125rem',
+      subtitle: '1.375rem',
+      headingWeight: 800,
+      bodyWeight: 400,
+      buttonWeight: 700,
+      headingLineHeight: 1.15,
+      bodyLineHeight: 1.65,
     },
-    description: 'Professional fonts ideal for corporate and business websites',
+    borderRadius: {
+      sm: '0.375rem',
+      md: '0.75rem',
+      lg: '1rem',
+      xl: '1.5rem',
+      full: '9999px',
+    },
   },
   {
-    id: 'creative-artistic',
-    name: 'Creative Artistic',
+    id: 'professional-roboto',
+    name: 'Professional Roboto',
+    category: 'professional',
+    fonts: {
+      primary: 'Roboto',
+      secondary: 'Open Sans',
+      accent: 'Roboto Condensed',
+    },
+    typography: {
+      h1: '2.5rem',
+      h2: '2rem',
+      h3: '1.5rem',
+      h4: '1.25rem',
+      body: '1rem',
+      small: '0.875rem',
+      button: '1rem',
+      subtitle: '1.25rem',
+      headingWeight: 700,
+      bodyWeight: 400,
+      buttonWeight: 500,
+      headingLineHeight: 1.25,
+      bodyLineHeight: 1.6,
+    },
+    borderRadius: {
+      sm: '0.25rem',
+      md: '0.5rem',
+      lg: '0.75rem',
+      xl: '1rem',
+      full: '9999px',
+    },
+  },
+  {
+    id: 'creative-oswald',
+    name: 'Creative Oswald',
+    category: 'creative',
     fonts: {
       primary: 'Oswald',
-      secondary: 'Raleway',
+      secondary: 'Lato',
       accent: 'Dancing Script',
     },
-    description: 'Bold, creative fonts for artistic and design-focused websites',
+    typography: {
+      h1: '3rem',
+      h2: '2.5rem',
+      h3: '2rem',
+      h4: '1.75rem',
+      body: '1.125rem',
+      small: '1rem',
+      button: '1.25rem',
+      subtitle: '1.5rem',
+      headingWeight: 600,
+      bodyWeight: 400,
+      buttonWeight: 600,
+      headingLineHeight: 1.1,
+      bodyLineHeight: 1.7,
+    },
+    borderRadius: {
+      sm: '0.125rem',
+      md: '0.25rem',
+      lg: '0.5rem',
+      xl: '0.75rem',
+      full: '9999px',
+    },
   },
   {
-    id: 'minimal-geometric',
-    name: 'Minimal Geometric',
+    id: 'minimal-work-sans',
+    name: 'Minimal Work Sans',
+    category: 'minimal',
     fonts: {
       primary: 'Work Sans',
       secondary: 'Karla',
       accent: 'Space Mono',
     },
-    description: 'Clean geometric fonts for minimal and modern designs',
-  },
-  {
-    id: 'classic-traditional',
-    name: 'Classic Traditional',
-    fonts: {
-      primary: 'Crimson Text',
-      secondary: 'Libre Baskerville',
-      accent: 'Old Standard TT',
+    typography: {
+      h1: '2.25rem',
+      h2: '1.875rem',
+      h3: '1.5rem',
+      h4: '1.25rem',
+      body: '1rem',
+      small: '0.875rem',
+      button: '0.875rem',
+      subtitle: '1.125rem',
+      headingWeight: 600,
+      bodyWeight: 400,
+      buttonWeight: 500,
+      headingLineHeight: 1.3,
+      bodyLineHeight: 1.5,
     },
-    description: 'Traditional serif fonts for classic and timeless designs',
-  },
-  {
-    id: 'tech-futuristic',
-    name: 'Tech Futuristic',
-    fonts: {
-      primary: 'Orbitron',
-      secondary: 'Exo 2',
-      accent: 'Rajdhani',
+    borderRadius: {
+      sm: '0.125rem',
+      md: '0.25rem',
+      lg: '0.5rem',
+      xl: '0.75rem',
+      full: '9999px',
     },
-    description: 'Futuristic fonts perfect for tech and gaming websites',
   },
 ];
 
-const defaultTheme = colorCollections[0];
+const defaultColorTheme = colorThemes[0];
+const defaultFontTheme = fontThemes[0];
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [currentTheme, setCurrentTheme] = useState<ThemeConfig>(defaultTheme);
+  const [currentColorTheme, setCurrentColorTheme] = useState<ColorTheme>(() => {
+    const saved = localStorage.getItem('selected_color_theme');
+    return saved ? colorThemes.find(t => t.id === saved) || defaultColorTheme : defaultColorTheme;
+  });
+
+  const [currentFontTheme, setCurrentFontTheme] = useState<FontTheme>(() => {
+    const saved = localStorage.getItem('selected_font_theme');
+    return saved ? fontThemes.find(t => t.id === saved) || defaultFontTheme : defaultFontTheme;
+  });
 
   // Apply CSS variables to root for WEBSITE theme only
   useEffect(() => {
-    if (!currentTheme) return;
-    
     const root = document.documentElement;
 
-    // Apply website colors (these change with theme)
-    Object.entries(currentTheme.colors).forEach(([key, value]) => {
+    // Apply website colors (these change with color theme)
+    Object.entries(currentColorTheme.colors).forEach(([key, value]) => {
       const cssVar = key.replace(/([A-Z])/g, '-$1').toLowerCase();
       root.style.setProperty(`--website-color-${cssVar}`, value);
     });
 
+    // Apply website shadows
+    Object.entries(currentColorTheme.shadows).forEach(([key, value]) => {
+      root.style.setProperty(`--website-shadow-${key}`, value);
+    });
+
     // Apply website fonts
-    Object.entries(currentTheme.fonts).forEach(([key, value]) => {
+    Object.entries(currentFontTheme.fonts).forEach(([key, value]) => {
       root.style.setProperty(`--website-font-${key}`, `'${value}', sans-serif`);
     });
 
-    // Apply website shadows
-    if (currentTheme.shadows) {
-      Object.entries(currentTheme.shadows).forEach(([key, value]) => {
-        root.style.setProperty(`--website-shadow-${key}`, value);
-      });
-    }
+    // Apply website typography
+    Object.entries(currentFontTheme.typography).forEach(([key, value]) => {
+      const cssVar = key.replace(/([A-Z])/g, '-$1').toLowerCase();
+      root.style.setProperty(`--website-typography-${cssVar}`, value.toString());
+    });
 
-    // Load Google Fonts
-    const fontFamilies = Object.values(currentTheme.fonts);
+    // Apply website border radius
+    Object.entries(currentFontTheme.borderRadius).forEach(([key, value]) => {
+      root.style.setProperty(`--website-border-radius-${key}`, value);
+    });
+
+    // Load Google Fonts for current font theme
+    const fontFamilies = Object.values(currentFontTheme.fonts);
 
     // Remove existing font link
     const existingLink = document.querySelector('link[data-website-fonts]');
@@ -407,71 +526,90 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     link.setAttribute('data-website-fonts', 'true');
     document.head.appendChild(link);
 
-  }, [currentTheme]);
+  }, [currentColorTheme, currentFontTheme]);
 
-  const updateTheme = (themeId: string) => {
-    const theme = colorCollections.find(t => t.id === themeId);
+  const updateColorTheme = (themeId: string) => {
+    const theme = colorThemes.find(t => t.id === themeId);
     if (theme) {
-      setCurrentTheme(theme);
+      setCurrentColorTheme(theme);
+      localStorage.setItem('selected_color_theme', themeId);
     }
   };
 
-  const updateFonts = (fontCollectionId: string) => {
-    const fontCollection = fontCollections.find(f => f.id === fontCollectionId);
-    if (fontCollection) {
-      setCurrentTheme(prev => ({
-        ...prev,
-        fonts: fontCollection.fonts
-      }));
+  const updateFontTheme = (themeId: string) => {
+    const theme = fontThemes.find(t => t.id === themeId);
+    if (theme) {
+      setCurrentFontTheme(theme);
+      localStorage.setItem('selected_font_theme', themeId);
     }
-  };
-
-  const applyCustomColors = (colors: Partial<ThemeConfig['colors']>) => {
-    setCurrentTheme(prev => ({
-      ...prev,
-      colors: { ...prev.colors, ...colors }
-    }));
   };
 
   // Helper function to get CSS custom properties for website
   const getCSSVariables = () => {
     return {
-      '--website-color-primary': currentTheme.colors.primary,
-      '--website-color-secondary': currentTheme.colors.secondary,
-      '--website-color-accent': currentTheme.colors.accent,
-      '--website-color-background': currentTheme.colors.background,
-      '--website-color-surface': currentTheme.colors.surface,
-      '--website-color-text': currentTheme.colors.text,
-      '--website-color-text-secondary': currentTheme.colors.textSecondary,
-      '--website-color-border': currentTheme.colors.border,
-      '--website-color-success': currentTheme.colors.success,
-      '--website-color-warning': currentTheme.colors.warning,
-      '--website-color-error': currentTheme.colors.error,
-      '--website-color-primary-100': currentTheme.colors.primary100,
-      '--website-color-primary-200': currentTheme.colors.primary200,
-      '--website-color-primary-300': currentTheme.colors.primary300,
-      '--website-color-secondary-100': currentTheme.colors.secondary100,
-      '--website-color-secondary-200': currentTheme.colors.secondary200,
-      '--website-color-accent-100': currentTheme.colors.accent100,
-      '--website-color-accent-200': currentTheme.colors.accent200,
-      '--website-font-primary': `'${currentTheme.fonts.primary}', sans-serif`,
-      '--website-font-secondary': `'${currentTheme.fonts.secondary}', sans-serif`,
-      '--website-font-accent': `'${currentTheme.fonts.accent}', serif`,
-      '--website-shadow-sm': currentTheme.shadows.sm,
-      '--website-shadow-md': currentTheme.shadows.md,
-      '--website-shadow-lg': currentTheme.shadows.lg,
-      '--website-shadow-xl': currentTheme.shadows.xl,
+      // Colors
+      '--website-color-primary': currentColorTheme.colors.primary,
+      '--website-color-secondary': currentColorTheme.colors.secondary,
+      '--website-color-accent': currentColorTheme.colors.accent,
+      '--website-color-background': currentColorTheme.colors.background,
+      '--website-color-surface': currentColorTheme.colors.surface,
+      '--website-color-text': currentColorTheme.colors.text,
+      '--website-color-text-secondary': currentColorTheme.colors.textSecondary,
+      '--website-color-border': currentColorTheme.colors.border,
+      '--website-color-success': currentColorTheme.colors.success,
+      '--website-color-warning': currentColorTheme.colors.warning,
+      '--website-color-error': currentColorTheme.colors.error,
+      '--website-color-primary-100': currentColorTheme.colors.primary100,
+      '--website-color-primary-200': currentColorTheme.colors.primary200,
+      '--website-color-primary-300': currentColorTheme.colors.primary300,
+      '--website-color-secondary-100': currentColorTheme.colors.secondary100,
+      '--website-color-secondary-200': currentColorTheme.colors.secondary200,
+      '--website-color-accent-100': currentColorTheme.colors.accent100,
+      '--website-color-accent-200': currentColorTheme.colors.accent200,
+      
+      // Shadows
+      '--website-shadow-sm': currentColorTheme.shadows.sm,
+      '--website-shadow-md': currentColorTheme.shadows.md,
+      '--website-shadow-lg': currentColorTheme.shadows.lg,
+      '--website-shadow-xl': currentColorTheme.shadows.xl,
+      
+      // Fonts
+      '--website-font-primary': `'${currentFontTheme.fonts.primary}', sans-serif`,
+      '--website-font-secondary': `'${currentFontTheme.fonts.secondary}', sans-serif`,
+      '--website-font-accent': `'${currentFontTheme.fonts.accent}', serif`,
+      
+      // Typography
+      '--website-typography-h1': currentFontTheme.typography.h1,
+      '--website-typography-h2': currentFontTheme.typography.h2,
+      '--website-typography-h3': currentFontTheme.typography.h3,
+      '--website-typography-h4': currentFontTheme.typography.h4,
+      '--website-typography-body': currentFontTheme.typography.body,
+      '--website-typography-small': currentFontTheme.typography.small,
+      '--website-typography-button': currentFontTheme.typography.button,
+      '--website-typography-subtitle': currentFontTheme.typography.subtitle,
+      '--website-typography-heading-weight': currentFontTheme.typography.headingWeight.toString(),
+      '--website-typography-body-weight': currentFontTheme.typography.bodyWeight.toString(),
+      '--website-typography-button-weight': currentFontTheme.typography.buttonWeight.toString(),
+      '--website-typography-heading-line-height': currentFontTheme.typography.headingLineHeight.toString(),
+      '--website-typography-body-line-height': currentFontTheme.typography.bodyLineHeight.toString(),
+      
+      // Border Radius
+      '--website-border-radius-sm': currentFontTheme.borderRadius.sm,
+      '--website-border-radius-md': currentFontTheme.borderRadius.md,
+      '--website-border-radius-lg': currentFontTheme.borderRadius.lg,
+      '--website-border-radius-xl': currentFontTheme.borderRadius.xl,
+      '--website-border-radius-full': currentFontTheme.borderRadius.full,
     };
   };
 
   return (
     <ThemeContext.Provider value={{
-      currentTheme,
-      availableThemes: colorCollections,
-      availableFonts: fontCollections,
-      updateTheme,
-      updateFonts,
-      applyCustomColors,
+      currentColorTheme,
+      currentFontTheme,
+      availableColorThemes: colorThemes,
+      availableFontThemes: fontThemes,
+      updateColorTheme,
+      updateFontTheme,
       getCSSVariables
     }}>
       {children}
@@ -487,3 +625,6 @@ export const useTheme = () => {
   }
   return context;
 };
+
+// Export types for use in other components
+export type { ColorTheme, FontTheme };

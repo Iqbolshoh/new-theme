@@ -2,7 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Plus, X } from 'lucide-react';
 import * as LucideIcons from 'lucide-react';
-import { ThemeDefinition } from '../../../core/ThemeRegistry';
+import { useTheme } from '../../../contexts/ThemeContext';
 
 interface Service {
   icon: string;
@@ -18,11 +18,12 @@ interface ServicesGridProps {
   };
   isEditing: boolean;
   onChange: (content: any) => void;
-  theme?: ThemeDefinition;
   onIconClick?: (field: string) => void;
 }
 
-const ServicesGrid: React.FC<ServicesGridProps> = ({ content, isEditing, onChange, theme, onIconClick }) => {
+const ServicesGrid: React.FC<ServicesGridProps> = ({ content, isEditing, onChange, onIconClick }) => {
+  const { currentColorTheme, currentFontTheme } = useTheme();
+
   const handleChange = (field: string, value: any) => {
     onChange({ ...content, [field]: value });
   };
@@ -57,8 +58,8 @@ const ServicesGrid: React.FC<ServicesGridProps> = ({ content, isEditing, onChang
     <section 
       className="py-20"
       style={{ 
-        backgroundColor: theme?.colors?.background || '#f9fafb',
-        fontFamily: theme?.fonts?.primary || 'Inter, system-ui, sans-serif'
+        backgroundColor: currentColorTheme.colors.background,
+        fontFamily: currentFontTheme.fonts.primary
       }}
     >
       <div className="max-w-7xl mx-auto px-4">
@@ -71,12 +72,12 @@ const ServicesGrid: React.FC<ServicesGridProps> = ({ content, isEditing, onChang
                 onChange={(e) => handleChange('title', e.target.value)}
                 className="mb-4 bg-transparent border-2 border-dashed rounded-lg p-2 text-center w-full max-w-2xl mx-auto"
                 style={{ 
-                  color: theme?.colors?.primary || '#3b82f6',
-                  borderColor: `${theme?.colors?.primary || '#3b82f6'}50`,
-                  fontFamily: theme?.fonts?.primary || 'Inter, system-ui, sans-serif',
-                  fontSize: 'clamp(1.5rem, 4vw, 2.5rem)',
-                  fontWeight: theme?.typography?.headingWeight || 700,
-                  borderRadius: theme?.borderRadius?.lg || '12px'
+                  color: currentColorTheme.colors.primary,
+                  borderColor: `${currentColorTheme.colors.primary}50`,
+                  fontFamily: currentFontTheme.fonts.primary,
+                  fontSize: currentFontTheme.typography.h2,
+                  fontWeight: currentFontTheme.typography.headingWeight,
+                  borderRadius: currentFontTheme.borderRadius.lg
                 }}
                 placeholder="Enter title"
               />
@@ -86,12 +87,12 @@ const ServicesGrid: React.FC<ServicesGridProps> = ({ content, isEditing, onChang
                 onChange={(e) => handleChange('subtitle', e.target.value)}
                 className="bg-transparent border-2 border-dashed rounded-lg p-2 text-center w-full max-w-3xl mx-auto"
                 style={{ 
-                  color: theme?.colors?.textSecondary || '#6b7280',
-                  borderColor: `${theme?.colors?.primary || '#3b82f6'}50`,
-                  fontFamily: theme?.fonts?.secondary || 'Inter, system-ui, sans-serif',
-                  fontSize: theme?.typography?.body || '1rem',
-                  fontWeight: theme?.typography?.bodyWeight || 400,
-                  borderRadius: theme?.borderRadius?.lg || '12px'
+                  color: currentColorTheme.colors.textSecondary,
+                  borderColor: `${currentColorTheme.colors.primary}50`,
+                  fontFamily: currentFontTheme.fonts.secondary,
+                  fontSize: currentFontTheme.typography.body,
+                  fontWeight: currentFontTheme.typography.bodyWeight,
+                  borderRadius: currentFontTheme.borderRadius.lg
                 }}
                 placeholder="Enter subtitle"
               />
@@ -105,11 +106,11 @@ const ServicesGrid: React.FC<ServicesGridProps> = ({ content, isEditing, onChang
                 viewport={{ once: true }}
                 className="mb-4"
                 style={{ 
-                  color: theme?.colors?.primary || '#3b82f6',
-                  fontFamily: theme?.fonts?.primary || 'Inter, system-ui, sans-serif',
-                  fontSize: 'clamp(1.5rem, 4vw, 2.5rem)',
-                  fontWeight: theme?.typography?.headingWeight || 700,
-                  lineHeight: theme?.typography?.headingLineHeight || 1.2
+                  color: currentColorTheme.colors.primary,
+                  fontFamily: currentFontTheme.fonts.primary,
+                  fontSize: currentFontTheme.typography.h2,
+                  fontWeight: currentFontTheme.typography.headingWeight,
+                  lineHeight: currentFontTheme.typography.headingLineHeight
                 }}
               >
                 {content.title}
@@ -121,11 +122,11 @@ const ServicesGrid: React.FC<ServicesGridProps> = ({ content, isEditing, onChang
                 viewport={{ once: true }}
                 className="max-w-2xl mx-auto"
                 style={{ 
-                  color: theme?.colors?.textSecondary || '#6b7280',
-                  fontFamily: theme?.fonts?.secondary || 'Inter, system-ui, sans-serif',
-                  fontSize: theme?.typography?.body || '1rem',
-                  fontWeight: theme?.typography?.bodyWeight || 400,
-                  lineHeight: theme?.typography?.bodyLineHeight || 1.6
+                  color: currentColorTheme.colors.textSecondary,
+                  fontFamily: currentFontTheme.fonts.secondary,
+                  fontSize: currentFontTheme.typography.body,
+                  fontWeight: currentFontTheme.typography.bodyWeight,
+                  lineHeight: currentFontTheme.typography.bodyLineHeight
                 }}
               >
                 {content.subtitle}
@@ -147,17 +148,17 @@ const ServicesGrid: React.FC<ServicesGridProps> = ({ content, isEditing, onChang
                 viewport={{ once: true }}
                 className="p-8 transition-shadow duration-300 relative group"
                 style={{ 
-                  backgroundColor: theme?.colors?.surface || '#ffffff',
-                  boxShadow: theme?.shadows?.lg || '0 10px 15px -3px rgb(0 0 0 / 0.1)',
-                  borderRadius: theme?.borderRadius?.xl || '16px',
-                  border: `1px solid ${theme?.colors?.border || '#e5e7eb'}`
+                  backgroundColor: currentColorTheme.colors.surface,
+                  boxShadow: currentColorTheme.shadows.lg,
+                  borderRadius: currentFontTheme.borderRadius.xl,
+                  border: `1px solid ${currentColorTheme.colors.border}`
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.boxShadow = theme?.shadows?.xl || '0 20px 25px -5px rgb(0 0 0 / 0.1)';
+                  e.currentTarget.style.boxShadow = currentColorTheme.shadows.xl;
                   e.currentTarget.style.transform = 'translateY(-4px)';
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.boxShadow = theme?.shadows?.lg || '0 10px 15px -3px rgb(0 0 0 / 0.1)';
+                  e.currentTarget.style.boxShadow = currentColorTheme.shadows.lg;
                   e.currentTarget.style.transform = 'translateY(0)';
                 }}
               >
@@ -166,8 +167,8 @@ const ServicesGrid: React.FC<ServicesGridProps> = ({ content, isEditing, onChang
                     onClick={() => removeService(index)}
                     className="absolute top-2 right-2 w-6 h-6 text-white rounded-full flex items-center justify-center text-sm opacity-0 group-hover:opacity-100 transition-opacity"
                     style={{ 
-                      backgroundColor: theme?.colors?.error || '#ef4444',
-                      borderRadius: theme?.borderRadius?.full || '50%'
+                      backgroundColor: currentColorTheme.colors.error,
+                      borderRadius: currentFontTheme.borderRadius.full
                     }}
                   >
                     <X className="w-4 h-4" />
@@ -177,9 +178,9 @@ const ServicesGrid: React.FC<ServicesGridProps> = ({ content, isEditing, onChang
                 <div 
                   className="w-16 h-16 flex items-center justify-center mb-6"
                   style={{ 
-                    background: `linear-gradient(135deg, ${theme?.colors?.primary || '#3b82f6'}, ${theme?.colors?.secondary || '#06b6d4'})`,
-                    borderRadius: theme?.borderRadius?.xl || '16px',
-                    boxShadow: theme?.shadows?.md || '0 4px 6px -1px rgb(0 0 0 / 0.1)'
+                    background: `linear-gradient(135deg, ${currentColorTheme.colors.primary}, ${currentColorTheme.colors.secondary})`,
+                    borderRadius: currentFontTheme.borderRadius.xl,
+                    boxShadow: currentColorTheme.shadows.md
                   }}
                 >
                   {isEditing ? (
@@ -188,7 +189,7 @@ const ServicesGrid: React.FC<ServicesGridProps> = ({ content, isEditing, onChang
                       className="w-full h-full text-center text-white bg-transparent border-2 border-dashed hover:border-white/60 transition-colors flex items-center justify-center"
                       style={{ 
                         borderColor: 'rgba(255, 255, 255, 0.3)',
-                        borderRadius: theme?.borderRadius?.xl || '16px'
+                        borderRadius: currentFontTheme.borderRadius.xl
                       }}
                       title="Click to change icon"
                     >
@@ -214,12 +215,12 @@ const ServicesGrid: React.FC<ServicesGridProps> = ({ content, isEditing, onChang
                       onChange={(e) => handleServiceChange(index, 'title', e.target.value)}
                       className="mb-4 bg-transparent border-2 border-dashed rounded-lg p-2 w-full"
                       style={{ 
-                        color: theme?.colors?.text || '#111827',
-                        borderColor: `${theme?.colors?.primary || '#3b82f6'}50`,
-                        fontFamily: theme?.fonts?.primary || 'Inter, system-ui, sans-serif',
-                        fontSize: theme?.typography?.h3 || '1.25rem',
-                        fontWeight: theme?.typography?.headingWeight || 700,
-                        borderRadius: theme?.borderRadius?.md || '8px'
+                        color: currentColorTheme.colors.text,
+                        borderColor: `${currentColorTheme.colors.primary}50`,
+                        fontFamily: currentFontTheme.fonts.primary,
+                        fontSize: currentFontTheme.typography.h3,
+                        fontWeight: currentFontTheme.typography.headingWeight,
+                        borderRadius: currentFontTheme.borderRadius.md
                       }}
                       placeholder="Service title"
                     />
@@ -228,12 +229,12 @@ const ServicesGrid: React.FC<ServicesGridProps> = ({ content, isEditing, onChang
                       onChange={(e) => handleServiceChange(index, 'description', e.target.value)}
                       className="bg-transparent border-2 border-dashed rounded-lg p-2 w-full resize-none"
                       style={{ 
-                        color: theme?.colors?.textSecondary || '#6b7280',
-                        borderColor: `${theme?.colors?.primary || '#3b82f6'}50`,
-                        fontFamily: theme?.fonts?.secondary || 'Inter, system-ui, sans-serif',
-                        fontSize: theme?.typography?.body || '1rem',
-                        fontWeight: theme?.typography?.bodyWeight || 400,
-                        borderRadius: theme?.borderRadius?.md || '8px'
+                        color: currentColorTheme.colors.textSecondary,
+                        borderColor: `${currentColorTheme.colors.primary}50`,
+                        fontFamily: currentFontTheme.fonts.secondary,
+                        fontSize: currentFontTheme.typography.body,
+                        fontWeight: currentFontTheme.typography.bodyWeight,
+                        borderRadius: currentFontTheme.borderRadius.md
                       }}
                       placeholder="Service description"
                       rows={3}
@@ -244,22 +245,22 @@ const ServicesGrid: React.FC<ServicesGridProps> = ({ content, isEditing, onChang
                     <h3 
                       className="mb-4"
                       style={{ 
-                        color: theme?.colors?.text || '#111827',
-                        fontFamily: theme?.fonts?.primary || 'Inter, system-ui, sans-serif',
-                        fontSize: theme?.typography?.h3 || '1.25rem',
-                        fontWeight: theme?.typography?.headingWeight || 700,
-                        lineHeight: theme?.typography?.headingLineHeight || 1.2
+                        color: currentColorTheme.colors.text,
+                        fontFamily: currentFontTheme.fonts.primary,
+                        fontSize: currentFontTheme.typography.h3,
+                        fontWeight: currentFontTheme.typography.headingWeight,
+                        lineHeight: currentFontTheme.typography.headingLineHeight
                       }}
                     >
                       {service.title}
                     </h3>
                     <p 
                       style={{ 
-                        color: theme?.colors?.textSecondary || '#6b7280',
-                        fontFamily: theme?.fonts?.secondary || 'Inter, system-ui, sans-serif',
-                        fontSize: theme?.typography?.body || '1rem',
-                        fontWeight: theme?.typography?.bodyWeight || 400,
-                        lineHeight: theme?.typography?.bodyLineHeight || 1.6
+                        color: currentColorTheme.colors.textSecondary,
+                        fontFamily: currentFontTheme.fonts.secondary,
+                        fontSize: currentFontTheme.typography.body,
+                        fontWeight: currentFontTheme.typography.bodyWeight,
+                        lineHeight: currentFontTheme.typography.bodyLineHeight
                       }}
                     >
                       {service.description}
@@ -275,16 +276,16 @@ const ServicesGrid: React.FC<ServicesGridProps> = ({ content, isEditing, onChang
               onClick={addService}
               className="border-2 border-dashed p-8 transition-all duration-200 flex items-center justify-center"
               style={{
-                borderColor: theme?.colors?.border || '#d1d5db',
+                borderColor: currentColorTheme.colors.border,
                 backgroundColor: 'transparent',
-                borderRadius: theme?.borderRadius?.xl || '16px'
+                borderRadius: currentFontTheme.borderRadius.xl
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.borderColor = theme?.colors?.primary || '#3b82f6';
-                e.currentTarget.style.backgroundColor = `${theme?.colors?.primary || '#3b82f6'}10`;
+                e.currentTarget.style.borderColor = currentColorTheme.colors.primary;
+                e.currentTarget.style.backgroundColor = `${currentColorTheme.colors.primary}10`;
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.borderColor = theme?.colors?.border || '#d1d5db';
+                e.currentTarget.style.borderColor = currentColorTheme.colors.border;
                 e.currentTarget.style.backgroundColor = 'transparent';
               }}
               whileHover={{ scale: 1.02 }}
@@ -293,14 +294,14 @@ const ServicesGrid: React.FC<ServicesGridProps> = ({ content, isEditing, onChang
               <div className="text-center">
                 <Plus 
                   className="w-8 h-8 mx-auto mb-2" 
-                  style={{ color: theme?.colors?.textSecondary || '#6b7280' }} 
+                  style={{ color: currentColorTheme.colors.textSecondary }} 
                 />
                 <span 
                   style={{ 
-                    color: theme?.colors?.textSecondary || '#6b7280',
-                    fontFamily: theme?.fonts?.secondary || 'Inter, system-ui, sans-serif',
-                    fontSize: theme?.typography?.body || '1rem',
-                    fontWeight: theme?.typography?.bodyWeight || 400
+                    color: currentColorTheme.colors.textSecondary,
+                    fontFamily: currentFontTheme.fonts.secondary,
+                    fontSize: currentFontTheme.typography.body,
+                    fontWeight: currentFontTheme.typography.bodyWeight
                   }}
                 >
                   Add Service

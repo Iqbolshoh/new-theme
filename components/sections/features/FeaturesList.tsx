@@ -2,7 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Plus, X } from 'lucide-react';
 import * as LucideIcons from 'lucide-react';
-import { ThemeDefinition } from '../../../core/ThemeRegistry';
+import { useTheme } from '../../../contexts/ThemeContext';
 
 interface Feature {
   icon: string;
@@ -18,11 +18,12 @@ interface FeaturesListProps {
   };
   isEditing: boolean;
   onChange: (content: any) => void;
-  theme?: ThemeDefinition;
   onIconClick?: (field: string) => void;
 }
 
-const FeaturesList: React.FC<FeaturesListProps> = ({ content, isEditing, onChange, theme, onIconClick }) => {
+const FeaturesList: React.FC<FeaturesListProps> = ({ content, isEditing, onChange, onIconClick }) => {
+  const { currentColorTheme, currentFontTheme } = useTheme();
+
   const handleChange = (field: string, value: any) => {
     onChange({ ...content, [field]: value });
   };
@@ -57,8 +58,8 @@ const FeaturesList: React.FC<FeaturesListProps> = ({ content, isEditing, onChang
     <section 
       className="py-20"
       style={{ 
-        backgroundColor: theme?.colors?.surface || '#ffffff',
-        fontFamily: theme?.fonts?.primary || 'Inter, system-ui, sans-serif'
+        backgroundColor: currentColorTheme.colors.surface,
+        fontFamily: currentFontTheme.fonts.primary
       }}
     >
       <div className="max-w-7xl mx-auto px-4">
@@ -71,12 +72,12 @@ const FeaturesList: React.FC<FeaturesListProps> = ({ content, isEditing, onChang
                 onChange={(e) => handleChange('title', e.target.value)}
                 className="mb-4 bg-transparent border-2 border-dashed rounded-lg p-2 text-center w-full max-w-2xl mx-auto"
                 style={{ 
-                  color: theme?.colors?.primary || '#3b82f6',
-                  borderColor: `${theme?.colors?.primary || '#3b82f6'}50`,
-                  fontFamily: theme?.fonts?.primary || 'Inter, system-ui, sans-serif',
-                  fontSize: 'clamp(1.5rem, 4vw, 2.5rem)',
-                  fontWeight: theme?.typography?.headingWeight || 700,
-                  borderRadius: theme?.borderRadius?.lg || '12px'
+                  color: currentColorTheme.colors.primary,
+                  borderColor: `${currentColorTheme.colors.primary}50`,
+                  fontFamily: currentFontTheme.fonts.primary,
+                  fontSize: currentFontTheme.typography.h2,
+                  fontWeight: currentFontTheme.typography.headingWeight,
+                  borderRadius: currentFontTheme.borderRadius.lg
                 }}
                 placeholder="Enter title"
               />
@@ -86,12 +87,12 @@ const FeaturesList: React.FC<FeaturesListProps> = ({ content, isEditing, onChang
                 onChange={(e) => handleChange('subtitle', e.target.value)}
                 className="bg-transparent border-2 border-dashed rounded-lg p-2 text-center w-full max-w-3xl mx-auto"
                 style={{ 
-                  color: theme?.colors?.textSecondary || '#6b7280',
-                  borderColor: `${theme?.colors?.primary || '#3b82f6'}50`,
-                  fontFamily: theme?.fonts?.secondary || 'Inter, system-ui, sans-serif',
-                  fontSize: theme?.typography?.body || '1rem',
-                  fontWeight: theme?.typography?.bodyWeight || 400,
-                  borderRadius: theme?.borderRadius?.lg || '12px'
+                  color: currentColorTheme.colors.textSecondary,
+                  borderColor: `${currentColorTheme.colors.primary}50`,
+                  fontFamily: currentFontTheme.fonts.secondary,
+                  fontSize: currentFontTheme.typography.body,
+                  fontWeight: currentFontTheme.typography.bodyWeight,
+                  borderRadius: currentFontTheme.borderRadius.lg
                 }}
                 placeholder="Enter subtitle"
               />
@@ -105,11 +106,11 @@ const FeaturesList: React.FC<FeaturesListProps> = ({ content, isEditing, onChang
                 viewport={{ once: true }}
                 className="mb-4"
                 style={{ 
-                  color: theme?.colors?.primary || '#3b82f6',
-                  fontFamily: theme?.fonts?.primary || 'Inter, system-ui, sans-serif',
-                  fontSize: 'clamp(1.5rem, 4vw, 2.5rem)',
-                  fontWeight: theme?.typography?.headingWeight || 700,
-                  lineHeight: theme?.typography?.headingLineHeight || 1.2
+                  color: currentColorTheme.colors.primary,
+                  fontFamily: currentFontTheme.fonts.primary,
+                  fontSize: currentFontTheme.typography.h2,
+                  fontWeight: currentFontTheme.typography.headingWeight,
+                  lineHeight: currentFontTheme.typography.headingLineHeight
                 }}
               >
                 {content.title}
@@ -121,11 +122,11 @@ const FeaturesList: React.FC<FeaturesListProps> = ({ content, isEditing, onChang
                 viewport={{ once: true }}
                 className="max-w-3xl mx-auto"
                 style={{ 
-                  color: theme?.colors?.textSecondary || '#6b7280',
-                  fontFamily: theme?.fonts?.secondary || 'Inter, system-ui, sans-serif',
-                  fontSize: theme?.typography?.body || '1rem',
-                  fontWeight: theme?.typography?.bodyWeight || 400,
-                  lineHeight: theme?.typography?.bodyLineHeight || 1.6
+                  color: currentColorTheme.colors.textSecondary,
+                  fontFamily: currentFontTheme.fonts.secondary,
+                  fontSize: currentFontTheme.typography.body,
+                  fontWeight: currentFontTheme.typography.bodyWeight,
+                  lineHeight: currentFontTheme.typography.bodyLineHeight
                 }}
               >
                 {content.subtitle}
@@ -147,10 +148,10 @@ const FeaturesList: React.FC<FeaturesListProps> = ({ content, isEditing, onChang
                 viewport={{ once: true }}
                 className="flex items-start gap-4 p-6 relative group"
                 style={{ 
-                  backgroundColor: theme?.colors?.background || '#f9fafb',
-                  border: `1px solid ${theme?.colors?.border || '#e5e7eb'}`,
-                  borderRadius: theme?.borderRadius?.xl || '16px',
-                  boxShadow: theme?.shadows?.sm || '0 1px 2px 0 rgb(0 0 0 / 0.05)'
+                  backgroundColor: currentColorTheme.colors.background,
+                  border: `1px solid ${currentColorTheme.colors.border}`,
+                  borderRadius: currentFontTheme.borderRadius.xl,
+                  boxShadow: currentColorTheme.shadows.sm
                 }}
               >
                 {isEditing && (
@@ -158,8 +159,8 @@ const FeaturesList: React.FC<FeaturesListProps> = ({ content, isEditing, onChang
                     onClick={() => removeFeature(index)}
                     className="absolute top-2 right-2 w-6 h-6 text-white rounded-full flex items-center justify-center text-sm opacity-0 group-hover:opacity-100 transition-opacity"
                     style={{ 
-                      backgroundColor: theme?.colors?.error || '#ef4444',
-                      borderRadius: theme?.borderRadius?.full || '50%'
+                      backgroundColor: currentColorTheme.colors.error,
+                      borderRadius: currentFontTheme.borderRadius.full
                     }}
                   >
                     <X className="w-4 h-4" />
@@ -169,8 +170,8 @@ const FeaturesList: React.FC<FeaturesListProps> = ({ content, isEditing, onChang
                 <div 
                   className="w-12 h-12 rounded-lg flex items-center justify-center flex-shrink-0"
                   style={{ 
-                    backgroundColor: `${theme?.colors?.primary || '#3b82f6'}20`,
-                    borderRadius: theme?.borderRadius?.lg || '12px'
+                    backgroundColor: `${currentColorTheme.colors.primary}20`,
+                    borderRadius: currentFontTheme.borderRadius.lg
                   }}
                 >
                   {isEditing ? (
@@ -178,13 +179,13 @@ const FeaturesList: React.FC<FeaturesListProps> = ({ content, isEditing, onChang
                       onClick={() => onIconClick && onIconClick(`features.${index}.icon`)}
                       className="w-full h-full text-center bg-transparent border-2 border-dashed hover:border-opacity-60 transition-colors flex items-center justify-center"
                       style={{ 
-                        color: theme?.colors?.primary || '#3b82f6',
-                        borderColor: `${theme?.colors?.primary || '#3b82f6'}30`,
-                        borderRadius: theme?.borderRadius?.lg || '12px'
+                        color: currentColorTheme.colors.primary,
+                        borderColor: `${currentColorTheme.colors.primary}30`,
+                        borderRadius: currentFontTheme.borderRadius.lg
                       }}
                       title="Click to change icon"
                     >
-                      <IconComponent className="w-6 h-6" style={{ color: theme?.colors?.primary || '#3b82f6' }} />
+                      <IconComponent className="w-6 h-6" style={{ color: currentColorTheme.colors.primary }} />
                     </button>
                   ) : (
                     <motion.div
@@ -193,7 +194,7 @@ const FeaturesList: React.FC<FeaturesListProps> = ({ content, isEditing, onChang
                       transition={{ duration: 0.3 }}
                       key={feature.icon}
                     >
-                      <IconComponent className="w-6 h-6" style={{ color: theme?.colors?.primary || '#3b82f6' }} />
+                      <IconComponent className="w-6 h-6" style={{ color: currentColorTheme.colors.primary }} />
                     </motion.div>
                   )}
                 </div>
@@ -207,12 +208,12 @@ const FeaturesList: React.FC<FeaturesListProps> = ({ content, isEditing, onChang
                         onChange={(e) => handleFeatureChange(index, 'title', e.target.value)}
                         className="mb-2 bg-transparent border-2 border-dashed rounded-lg p-1 w-full"
                         style={{ 
-                          color: theme?.colors?.text || '#111827',
-                          borderColor: `${theme?.colors?.primary || '#3b82f6'}50`,
-                          fontFamily: theme?.fonts?.primary || 'Inter, system-ui, sans-serif',
-                          fontSize: theme?.typography?.h3 || '1.25rem',
-                          fontWeight: theme?.typography?.headingWeight || 700,
-                          borderRadius: theme?.borderRadius?.md || '8px'
+                          color: currentColorTheme.colors.text,
+                          borderColor: `${currentColorTheme.colors.primary}50`,
+                          fontFamily: currentFontTheme.fonts.primary,
+                          fontSize: currentFontTheme.typography.h3,
+                          fontWeight: currentFontTheme.typography.headingWeight,
+                          borderRadius: currentFontTheme.borderRadius.md
                         }}
                         placeholder="Feature title"
                       />
@@ -221,12 +222,12 @@ const FeaturesList: React.FC<FeaturesListProps> = ({ content, isEditing, onChang
                         onChange={(e) => handleFeatureChange(index, 'description', e.target.value)}
                         className="bg-transparent border-2 border-dashed rounded-lg p-2 w-full resize-none"
                         style={{ 
-                          color: theme?.colors?.textSecondary || '#6b7280',
-                          borderColor: `${theme?.colors?.primary || '#3b82f6'}50`,
-                          fontFamily: theme?.fonts?.secondary || 'Inter, system-ui, sans-serif',
-                          fontSize: theme?.typography?.body || '1rem',
-                          fontWeight: theme?.typography?.bodyWeight || 400,
-                          borderRadius: theme?.borderRadius?.md || '8px'
+                          color: currentColorTheme.colors.textSecondary,
+                          borderColor: `${currentColorTheme.colors.primary}50`,
+                          fontFamily: currentFontTheme.fonts.secondary,
+                          fontSize: currentFontTheme.typography.body,
+                          fontWeight: currentFontTheme.typography.bodyWeight,
+                          borderRadius: currentFontTheme.borderRadius.md
                         }}
                         placeholder="Feature description"
                         rows={2}
@@ -237,22 +238,22 @@ const FeaturesList: React.FC<FeaturesListProps> = ({ content, isEditing, onChang
                       <h3 
                         className="mb-2"
                         style={{ 
-                          color: theme?.colors?.text || '#111827',
-                          fontFamily: theme?.fonts?.primary || 'Inter, system-ui, sans-serif',
-                          fontSize: theme?.typography?.h3 || '1.25rem',
-                          fontWeight: theme?.typography?.headingWeight || 700,
-                          lineHeight: theme?.typography?.headingLineHeight || 1.2
+                          color: currentColorTheme.colors.text,
+                          fontFamily: currentFontTheme.fonts.primary,
+                          fontSize: currentFontTheme.typography.h3,
+                          fontWeight: currentFontTheme.typography.headingWeight,
+                          lineHeight: currentFontTheme.typography.headingLineHeight
                         }}
                       >
                         {feature.title}
                       </h3>
                       <p 
                         style={{ 
-                          color: theme?.colors?.textSecondary || '#6b7280',
-                          fontFamily: theme?.fonts?.secondary || 'Inter, system-ui, sans-serif',
-                          fontSize: theme?.typography?.body || '1rem',
-                          fontWeight: theme?.typography?.bodyWeight || 400,
-                          lineHeight: theme?.typography?.bodyLineHeight || 1.6
+                          color: currentColorTheme.colors.textSecondary,
+                          fontFamily: currentFontTheme.fonts.secondary,
+                          fontSize: currentFontTheme.typography.body,
+                          fontWeight: currentFontTheme.typography.bodyWeight,
+                          lineHeight: currentFontTheme.typography.bodyLineHeight
                         }}
                       >
                         {feature.description}
@@ -269,16 +270,16 @@ const FeaturesList: React.FC<FeaturesListProps> = ({ content, isEditing, onChang
               onClick={addFeature}
               className="border-2 border-dashed p-8 transition-all duration-200 flex items-center justify-center"
               style={{
-                borderColor: theme?.colors?.border || '#d1d5db',
+                borderColor: currentColorTheme.colors.border,
                 backgroundColor: 'transparent',
-                borderRadius: theme?.borderRadius?.xl || '16px'
+                borderRadius: currentFontTheme.borderRadius.xl
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.borderColor = theme?.colors?.primary || '#3b82f6';
-                e.currentTarget.style.backgroundColor = `${theme?.colors?.primary || '#3b82f6'}10`;
+                e.currentTarget.style.borderColor = currentColorTheme.colors.primary;
+                e.currentTarget.style.backgroundColor = `${currentColorTheme.colors.primary}10`;
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.borderColor = theme?.colors?.border || '#d1d5db';
+                e.currentTarget.style.borderColor = currentColorTheme.colors.border;
                 e.currentTarget.style.backgroundColor = 'transparent';
               }}
               whileHover={{ scale: 1.02 }}
@@ -287,14 +288,14 @@ const FeaturesList: React.FC<FeaturesListProps> = ({ content, isEditing, onChang
               <div className="text-center">
                 <Plus 
                   className="w-8 h-8 mx-auto mb-2" 
-                  style={{ color: theme?.colors?.textSecondary || '#6b7280' }} 
+                  style={{ color: currentColorTheme.colors.textSecondary }} 
                 />
                 <span 
                   style={{ 
-                    color: theme?.colors?.textSecondary || '#6b7280',
-                    fontFamily: theme?.fonts?.secondary || 'Inter, system-ui, sans-serif',
-                    fontSize: theme?.typography?.body || '1rem',
-                    fontWeight: theme?.typography?.bodyWeight || 400
+                    color: currentColorTheme.colors.textSecondary,
+                    fontFamily: currentFontTheme.fonts.secondary,
+                    fontSize: currentFontTheme.typography.body,
+                    fontWeight: currentFontTheme.typography.bodyWeight
                   }}
                 >
                   Add Feature

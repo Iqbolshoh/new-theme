@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Check } from 'lucide-react';
-import { ThemeDefinition } from '../../../core/ThemeRegistry';
+import { useTheme } from '../../../contexts/ThemeContext';
 
 interface HeroSplitProps {
   content: {
@@ -15,10 +15,11 @@ interface HeroSplitProps {
   };
   isEditing: boolean;
   onChange: (content: any) => void;
-  theme?: ThemeDefinition;
 }
 
-const HeroSplit: React.FC<HeroSplitProps> = ({ content, isEditing, onChange, theme }) => {
+const HeroSplit: React.FC<HeroSplitProps> = ({ content, isEditing, onChange }) => {
+  const { currentColorTheme, currentFontTheme } = useTheme();
+
   const handleChange = (field: string, value: any) => {
     onChange({ ...content, [field]: value });
   };
@@ -33,8 +34,8 @@ const HeroSplit: React.FC<HeroSplitProps> = ({ content, isEditing, onChange, the
     <section 
       className="py-20"
       style={{ 
-        backgroundColor: theme?.colors?.background || '#f9fafb',
-        fontFamily: theme?.fonts?.primary || 'Inter, system-ui, sans-serif'
+        backgroundColor: currentColorTheme.colors.background,
+        fontFamily: currentFontTheme.fonts.primary
       }}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -48,12 +49,12 @@ const HeroSplit: React.FC<HeroSplitProps> = ({ content, isEditing, onChange, the
                   onChange={(e) => handleChange('title', e.target.value)}
                   className="mb-6 bg-transparent border-2 border-dashed rounded-lg p-2 w-full"
                   style={{ 
-                    color: theme?.colors?.primary || '#3b82f6',
-                    borderColor: `${theme?.colors?.primary || '#3b82f6'}50`,
-                    fontFamily: theme?.fonts?.primary || 'Inter, system-ui, sans-serif',
-                    fontSize: 'clamp(1.5rem, 4vw, 2.5rem)',
-                    fontWeight: theme?.typography?.headingWeight || 700,
-                    borderRadius: theme?.borderRadius?.lg || '12px'
+                    color: currentColorTheme.colors.primary,
+                    borderColor: `${currentColorTheme.colors.primary}50`,
+                    fontFamily: currentFontTheme.fonts.primary,
+                    fontSize: currentFontTheme.typography.h2,
+                    fontWeight: currentFontTheme.typography.headingWeight,
+                    borderRadius: currentFontTheme.borderRadius.lg
                   }}
                   placeholder="Enter title"
                 />
@@ -63,12 +64,12 @@ const HeroSplit: React.FC<HeroSplitProps> = ({ content, isEditing, onChange, the
                   onChange={(e) => handleChange('subtitle', e.target.value)}
                   className="mb-4 bg-transparent border-2 border-dashed rounded-lg p-2 w-full"
                   style={{ 
-                    color: theme?.colors?.textSecondary || '#6b7280',
-                    borderColor: `${theme?.colors?.primary || '#3b82f6'}50`,
-                    fontFamily: theme?.fonts?.secondary || 'Inter, system-ui, sans-serif',
-                    fontSize: theme?.typography?.subtitle || '1.25rem',
-                    fontWeight: theme?.typography?.bodyWeight || 400,
-                    borderRadius: theme?.borderRadius?.lg || '12px'
+                    color: currentColorTheme.colors.textSecondary,
+                    borderColor: `${currentColorTheme.colors.primary}50`,
+                    fontFamily: currentFontTheme.fonts.secondary,
+                    fontSize: currentFontTheme.typography.subtitle,
+                    fontWeight: currentFontTheme.typography.bodyWeight,
+                    borderRadius: currentFontTheme.borderRadius.lg
                   }}
                   placeholder="Enter subtitle"
                 />
@@ -77,12 +78,12 @@ const HeroSplit: React.FC<HeroSplitProps> = ({ content, isEditing, onChange, the
                   onChange={(e) => handleChange('description', e.target.value)}
                   className="mb-6 bg-transparent border-2 border-dashed rounded-lg p-2 w-full resize-none"
                   style={{ 
-                    color: theme?.colors?.textSecondary || '#6b7280',
-                    borderColor: `${theme?.colors?.primary || '#3b82f6'}50`,
-                    fontFamily: theme?.fonts?.secondary || 'Inter, system-ui, sans-serif',
-                    fontSize: theme?.typography?.body || '1rem',
-                    fontWeight: theme?.typography?.bodyWeight || 400,
-                    borderRadius: theme?.borderRadius?.lg || '12px'
+                    color: currentColorTheme.colors.textSecondary,
+                    borderColor: `${currentColorTheme.colors.primary}50`,
+                    fontFamily: currentFontTheme.fonts.secondary,
+                    fontSize: currentFontTheme.typography.body,
+                    fontWeight: currentFontTheme.typography.bodyWeight,
+                    borderRadius: currentFontTheme.borderRadius.lg
                   }}
                   placeholder="Enter description"
                   rows={3}
@@ -92,8 +93,8 @@ const HeroSplit: React.FC<HeroSplitProps> = ({ content, isEditing, onChange, the
                     <div 
                       className="w-5 h-5 rounded-full flex items-center justify-center"
                       style={{ 
-                        backgroundColor: theme?.colors?.success || '#10b981',
-                        borderRadius: theme?.borderRadius?.full || '50%'
+                        backgroundColor: currentColorTheme.colors.success,
+                        borderRadius: currentFontTheme.borderRadius.full
                       }}
                     >
                       <Check className="w-3 h-3 text-white" />
@@ -104,11 +105,11 @@ const HeroSplit: React.FC<HeroSplitProps> = ({ content, isEditing, onChange, the
                       onChange={(e) => handleFeatureChange(index, e.target.value)}
                       className="flex-1 bg-transparent border-2 border-dashed rounded-lg p-1"
                       style={{ 
-                        color: theme?.colors?.text || '#111827',
-                        borderColor: `${theme?.colors?.primary || '#3b82f6'}50`,
-                        fontFamily: theme?.fonts?.secondary || 'Inter, system-ui, sans-serif',
-                        fontSize: theme?.typography?.body || '1rem',
-                        borderRadius: theme?.borderRadius?.md || '8px'
+                        color: currentColorTheme.colors.text,
+                        borderColor: `${currentColorTheme.colors.primary}50`,
+                        fontFamily: currentFontTheme.fonts.secondary,
+                        fontSize: currentFontTheme.typography.body,
+                        borderRadius: currentFontTheme.borderRadius.md
                       }}
                       placeholder="Feature"
                     />
@@ -123,11 +124,11 @@ const HeroSplit: React.FC<HeroSplitProps> = ({ content, isEditing, onChange, the
                   transition={{ duration: 0.8 }}
                   className="mb-6"
                   style={{ 
-                    color: theme?.colors?.primary || '#3b82f6',
-                    fontFamily: theme?.fonts?.primary || 'Inter, system-ui, sans-serif',
-                    fontSize: 'clamp(1.5rem, 4vw, 2.5rem)',
-                    fontWeight: theme?.typography?.headingWeight || 700,
-                    lineHeight: theme?.typography?.headingLineHeight || 1.2
+                    color: currentColorTheme.colors.primary,
+                    fontFamily: currentFontTheme.fonts.primary,
+                    fontSize: currentFontTheme.typography.h2,
+                    fontWeight: currentFontTheme.typography.headingWeight,
+                    lineHeight: currentFontTheme.typography.headingLineHeight
                   }}
                 >
                   {content.title}
@@ -138,11 +139,11 @@ const HeroSplit: React.FC<HeroSplitProps> = ({ content, isEditing, onChange, the
                   transition={{ duration: 0.8, delay: 0.2 }}
                   className="mb-4"
                   style={{ 
-                    color: theme?.colors?.textSecondary || '#6b7280',
-                    fontFamily: theme?.fonts?.secondary || 'Inter, system-ui, sans-serif',
-                    fontSize: theme?.typography?.subtitle || '1.25rem',
-                    fontWeight: theme?.typography?.bodyWeight || 400,
-                    lineHeight: theme?.typography?.bodyLineHeight || 1.6
+                    color: currentColorTheme.colors.textSecondary,
+                    fontFamily: currentFontTheme.fonts.secondary,
+                    fontSize: currentFontTheme.typography.subtitle,
+                    fontWeight: currentFontTheme.typography.bodyWeight,
+                    lineHeight: currentFontTheme.typography.bodyLineHeight
                   }}
                 >
                   {content.subtitle}
@@ -153,11 +154,11 @@ const HeroSplit: React.FC<HeroSplitProps> = ({ content, isEditing, onChange, the
                   transition={{ duration: 0.8, delay: 0.4 }}
                   className="mb-6"
                   style={{ 
-                    color: theme?.colors?.textSecondary || '#6b7280',
-                    fontFamily: theme?.fonts?.secondary || 'Inter, system-ui, sans-serif',
-                    fontSize: theme?.typography?.body || '1rem',
-                    fontWeight: theme?.typography?.bodyWeight || 400,
-                    lineHeight: theme?.typography?.bodyLineHeight || 1.6
+                    color: currentColorTheme.colors.textSecondary,
+                    fontFamily: currentFontTheme.fonts.secondary,
+                    fontSize: currentFontTheme.typography.body,
+                    fontWeight: currentFontTheme.typography.bodyWeight,
+                    lineHeight: currentFontTheme.typography.bodyLineHeight
                   }}
                 >
                   {content.description}
@@ -173,18 +174,18 @@ const HeroSplit: React.FC<HeroSplitProps> = ({ content, isEditing, onChange, the
                     <div 
                       className="w-5 h-5 rounded-full flex items-center justify-center"
                       style={{ 
-                        backgroundColor: theme?.colors?.success || '#10b981',
-                        borderRadius: theme?.borderRadius?.full || '50%'
+                        backgroundColor: currentColorTheme.colors.success,
+                        borderRadius: currentFontTheme.borderRadius.full
                       }}
                     >
                       <Check className="w-3 h-3 text-white" />
                     </div>
                     <span 
                       style={{ 
-                        color: theme?.colors?.text || '#111827',
-                        fontFamily: theme?.fonts?.secondary || 'Inter, system-ui, sans-serif',
-                        fontSize: theme?.typography?.body || '1rem',
-                        fontWeight: theme?.typography?.bodyWeight || 400
+                        color: currentColorTheme.colors.text,
+                        fontFamily: currentFontTheme.fonts.secondary,
+                        fontSize: currentFontTheme.typography.body,
+                        fontWeight: currentFontTheme.typography.bodyWeight
                       }}
                     >
                       {feature}
@@ -201,13 +202,13 @@ const HeroSplit: React.FC<HeroSplitProps> = ({ content, isEditing, onChange, the
                     href={content.ctaLink}
                     className="inline-block px-8 py-3 rounded-lg hover:opacity-90 transition-opacity font-semibold"
                     style={{ 
-                      background: `linear-gradient(135deg, ${theme?.colors?.primary || '#3b82f6'}, ${theme?.colors?.secondary || '#06b6d4'})`,
+                      background: `linear-gradient(135deg, ${currentColorTheme.colors.primary}, ${currentColorTheme.colors.secondary})`,
                       color: '#ffffff',
-                      fontFamily: theme?.fonts?.secondary || 'Inter, system-ui, sans-serif',
-                      fontSize: theme?.typography?.button || '1rem',
-                      fontWeight: theme?.typography?.buttonWeight || 600,
-                      borderRadius: theme?.borderRadius?.md || '8px',
-                      boxShadow: theme?.shadows?.md || '0 4px 6px -1px rgb(0 0 0 / 0.1)',
+                      fontFamily: currentFontTheme.fonts.secondary,
+                      fontSize: currentFontTheme.typography.button,
+                      fontWeight: currentFontTheme.typography.buttonWeight,
+                      borderRadius: currentFontTheme.borderRadius.md,
+                      boxShadow: currentColorTheme.shadows.md,
                       textDecoration: 'none'
                     }}
                   >
@@ -226,11 +227,11 @@ const HeroSplit: React.FC<HeroSplitProps> = ({ content, isEditing, onChange, the
                 onChange={(e) => handleChange('image', e.target.value)}
                 className="w-full h-96 border-2 border-dashed p-4 text-center"
                 style={{ 
-                  borderColor: theme?.colors?.border || '#d1d5db',
-                  backgroundColor: theme?.colors?.surface || '#ffffff',
-                  color: theme?.colors?.textSecondary || '#6b7280',
-                  fontFamily: theme?.fonts?.secondary || 'Inter, system-ui, sans-serif',
-                  borderRadius: theme?.borderRadius?.xl || '16px'
+                  borderColor: currentColorTheme.colors.border,
+                  backgroundColor: currentColorTheme.colors.surface,
+                  color: currentColorTheme.colors.textSecondary,
+                  fontFamily: currentFontTheme.fonts.secondary,
+                  borderRadius: currentFontTheme.borderRadius.xl
                 }}
                 placeholder="Image URL"
               />
@@ -243,8 +244,8 @@ const HeroSplit: React.FC<HeroSplitProps> = ({ content, isEditing, onChange, the
                 alt={content.title} 
                 className="w-full"
                 style={{ 
-                  boxShadow: theme?.shadows?.lg || '0 10px 15px -3px rgb(0 0 0 / 0.1)',
-                  borderRadius: theme?.borderRadius?.xl || '16px'
+                  boxShadow: currentColorTheme.shadows.lg,
+                  borderRadius: currentFontTheme.borderRadius.xl
                 }}
               />
             )}

@@ -24,7 +24,6 @@ import CTASimple from './sections/cta/CTASimple';
 import BlogGrid from './sections/blog/BlogGrid';
 import HeaderSimple from './sections/headers/HeaderSimple';
 import HeaderModern from './sections/headers/HeaderModern';
-import { ThemeDefinition } from '../core/ThemeRegistry';
 
 // Icon mapping for template icons
 import * as LucideIcons from 'lucide-react';
@@ -38,7 +37,6 @@ interface SectionRendererProps {
   section: SectionInstance;
   isSelected: boolean;
   onSelect: () => void;
-  theme?: ThemeDefinition;
   isPreview?: boolean;
   isEditing: boolean;
   onEdit: (editing: boolean) => void;
@@ -54,7 +52,6 @@ const SectionRenderer: React.FC<SectionRendererProps> = ({
   section,
   isSelected,
   onSelect,
-  theme,
   isPreview = false,
   isEditing,
   onEdit,
@@ -159,7 +156,6 @@ const SectionRenderer: React.FC<SectionRendererProps> = ({
       content: section.data,
       isEditing,
       onChange: handleContentChange,
-      theme,
       onIconClick: handleIconClick,
     };
 
